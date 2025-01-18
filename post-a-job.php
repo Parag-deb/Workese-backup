@@ -124,9 +124,9 @@ $conn->close();
                 <div>
                     <label for="job-category" class="block text-gray-700">Job Category</label>
                     <select id="job-category" name="job_category" class="w-full border border-gray-300 p-2 rounded mt-1" required>
-                        <option value="Hourly">Hourly</option>
-                        <option value="Part Time">Part Time</option>
-                        <option value="Full Time">Full Time</option>
+                        <option value="Plumber">Plumber</option>
+                        <option value="Driver">Driver</option>
+                        <option value="Full Time">k</option>
                         <option value="Contract">Contract</option>
                     </select>
                 </div>
