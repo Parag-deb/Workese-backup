@@ -1,5 +1,6 @@
 <?php 
 include 'connect.php';
+include 'nav.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if required fields are set
@@ -71,7 +72,7 @@ $conn->close();
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
 </head>
 <body class="font-roboto">
-<header class="bg-black text-white">
+<!-- <header class="bg-black text-white">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
         <div class="flex items-center">
             <img alt="Logo" class="mr-2" height="30" src="https://storage.googleapis.com/a1aa/image/E7INiQyIjO4fSicCYTqEpeAs0KSSXxpD0JWRytVGIjzegqEoA.jpg" width="30"/>
@@ -90,7 +91,8 @@ $conn->close();
             <button class="bg-green-500 py-1 px-4 rounded hover:bg-green-600">Register</button>
         </div>
     </div>
-</header>
+</header> -->
+
 <main class="bg-cover bg-center" style="background-image: url('https://placehold.co/1920x400');">
     <div class="container mx-auto text-center py-20 px-4">
         <h1 class="text-4xl font-bold text-white">Create Your Account</h1>

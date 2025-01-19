@@ -1,41 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>WORKESE</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-    </style>
-</head>
-
-<header class="bg-black text-white">
-    <div class="container mx-auto flex justify-between items-center py-4 px-6">
-        <div class="flex items-center">
-            <i class="fas fa-briefcase text-2xl mr-2"></i>
-            <span class="text-xl font-semibold">WORKESE</span>
-        </div>
-        <nav class="flex space-x-6">
-            <div class="hidden md:flex space-x-4">
-                <a class="hover:text-gray-400" href="/home/index.html">Home</a>
-                <a class="hover:text-gray-400" href="/jobs/index.html">Jobs</a>
-                <a class="hover:text-gray-400" href="/about us/index.html">About Us</a>
-                <a class="hover:text-gray-400" href="/contact us/index.html">Contact Us</a>
-            </div>
-        </nav>
-        <div class="flex space-x-4">
-            <button class="bg-transparent border border-white py-1 px-4 rounded hover:bg-white hover:text-black" onclick="loginBtn()">Login</button>
-            <button class="bg-green-500 py-1 px-4 rounded hover:bg-green-600" onclick="registerBtn()">Register</button>
-        </div>
-    </div>
-</header>
-<body class="bg-gray-100">
+<?php
+    include 'connect.php';
+    include 'nav.php';
+?>
 <main class="container mx-auto mt-8 px-6">
     <div class="flex flex-col lg:flex-row">
         <aside class="w-full lg:w-1/4 bg-white p-6 rounded-lg shadow-md mb-6 lg:mb-0">

@@ -3,7 +3,7 @@ session_start(); // Start a session
 
 // Include database connection
 include 'connect.php'; // Ensure this file connects to your database
-
+include 'nav.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect and sanitize input data
     $company_name = $conn->real_escape_string($_POST['company_name']);
@@ -50,48 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Close the connection
 $conn->close();
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create A Job</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-</head>
-<body class="bg-gray-100 font-roboto">
-    <nav class="bg-black text-white p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-lg font-bold">WORKESE</div>
-            <div class="hidden md:flex space-x-4">
-                <div class="hidden md:flex space-x-4">
-                    <a class="hover:text-gray-400" href="/home/index.html">Home</a>
-                    <a class="hover:text-gray-400" href="/jobs/index.html">Jobs</a>
-                    <a class="hover:text-gray-400" href="/about us/index.html">About Us</a>
-                    <a class="hover:text-gray-400" href="/contact us/index.html">Contact Us</a>
-                </div>
-            </div>
-            <div class="hidden md:flex space-x-4">
-                <button class="bg-gray-700 px-4 py-2 rounded hover:bg-gray-600">Login</button>
-                <button class="bg-green-500 px-4 py-2 rounded hover:bg-green-400">Register</button>
-            </div>
-            <div class="md:hidden">
-                <button id="menu-toggle" class="text-white focus:outline-none">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-        </div>
-        <div id="mobile-menu" class="hidden md:hidden">
-            <a class="block px-4 py-2 text-sm hover:bg-gray-700" href="#">Home</a>
-            <a class="block px-4 py-2 text-sm hover:bg-gray-700" href="#">Jobs</a>
-            <a class="block px-4 py-2 text-sm hover:bg-gray-700" href="#">About Us</a>
-            <a class="block px-4 py-2 text-sm hover:bg-gray-700" href="#">Contact Us</a>
-            <button class="block w-full text-left px-4 py-2 text-sm bg-gray-700 hover:bg-gray-600">Login</button>
-            <button class="block w-full text-left px-4 py-2 text-sm bg-green-500 hover:bg-green-400">Register</button>
-        </div>
-    </nav>
 
+    <body class="bg-gray-100 font-roboto">
     <main class="flex flex-col items-center mt-10 px-4" method="POST">
         <h1 class="text-4xl font-bold mb-4">Create A Job</h1>
         <p class="mb-6">Already create an account? <a href="#" class="bg-teal-500 text-white px-4 py-2 rounded">Sign in</a></p>

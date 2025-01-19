@@ -1,7 +1,8 @@
 <?php
+session_start();
 require 'connect.php';
 // Start session
-//session_start();
+
 
 // Database configuration
 
@@ -27,7 +28,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $user = mysqli_fetch_array($result , MYSQLI_ASSOC);
     if($user){
         if(password_verify($password, $user["password"])){
-            header("Location:create-account.php");
+            $_SESSION['id']= $user['id'];
+            $_SESSION['email']=$user['email'];
+            $_SESSION['name']=$user['name'];
+            header("Location:post-a-job.php");
             die();
         }
         else {
