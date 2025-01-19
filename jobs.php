@@ -45,230 +45,124 @@
             </div>
             <!-- Other filters here -->
             <div class="mb-4">
-            <label class="block mb-2">
-            Location
-            </label>
-            <select class="w-full p-2 border rounded">
-            <option>
-                Choose city
-            </option>
-            </select>
-            </div>
-            <div class="mb-4">
-            <h3 class="font-semibold mb-2">
-            Category
-            </h3>
-            <div class="space-y-2">
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                Commerce
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                Telecommunications
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                Hotels &amp; Tourism
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                Education
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                Financial Services
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            </div>
-            <button class="mt-4 text-green-500">
-            Show More
-            </button>
-            </div>
-            <div class="mb-4">
-            <h3 class="font-semibold mb-2">
-            Job Type
-            </h3>
-            <div class="space-y-2">
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                Full Time
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                Part Time
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                Freelance
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                Seasonal
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                Fixed-Price
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            </div>
-            </div>
-            <div class="mb-4">
-            <h3 class="font-semibold mb-2">
-            Experience Level
-            </h3>
-            <div class="space-y-2">
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                No-experience
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                Fresher
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                Intermediate
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                Expert
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            </div>
-            </div>
-            <div class="mb-4">
-            <h3 class="font-semibold mb-2">
-            Date Posted
-            </h3>
-            <div class="space-y-2">
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                All
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                Last Hour
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                Last 24 Hours
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                Last 7 Days
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            <label class="flex items-center">
-                <input class="mr-2" type="checkbox"/>
-                Last 30 Days
-                <span class="ml-auto">
-                10
-                </span>
-            </label>
-            </div>
-            </div>
-            <div class="mb-4">
-            <h3 class="font-semibold mb-2">
-            Salary
-            </h3>
-            <div class="flex items-center">
-            <input class="w-full" max="99999" min="0" type="range"/>
-            <span class="ml-2">
-                Salary: $0 - $99999
-            </span>
-            </div>
-            <button class="mt-4 bg-green-500 text-white py-1 px-4 rounded">
-            Apply
-            </button>
-            </div>
-            <div class="mb-4">
-            <h3 class="font-semibold mb-2">
-            Tags
-            </h3>
-            <div class="flex flex-wrap gap-2">
-            <span class="bg-gray-200 text-gray-700 py-1 px-2 rounded">
-                engineering
-            </span>
-            <span class="bg-gray-200 text-gray-700 py-1 px-2 rounded">
-                design
-            </span>
-            <span class="bg-gray-200 text-gray-700 py-1 px-2 rounded">
-                ui/ux
-            </span>
-            <span class="bg-gray-200 text-gray-700 py-1 px-2 rounded">
-                marketing
-            </span>
-            <span class="bg-gray-200 text-gray-700 py-1 px-2 rounded">
-                management
-            </span>
-            <span class="bg-gray-200 text-gray-700 py-1 px-2 rounded">
-                soft
-            </span>
-            <span class="bg-gray-200 text-gray-700 py-1 px-2 rounded">
-                construction
-            </span>
-            </div>
-            </div>
-            <div class="bg-gray-300 p-4 rounded-lg text-center">
-            <h3 class="text-lg font-semibold mb-2">
-            WE ARE HIRING
-            </h3>
-            <p>
-            Apply Today!
-            </p>
-            <img alt="We are hiring banner" class="mt-4 rounded-lg" height="200" src="https://storage.googleapis.com/a1aa/image/5dvlHHkAd0rvJ1tYI4qkjeRAloCFvTEvmsBp5OKCWylb4KBKA.jpg" width="200"/>
-            </div>
+            <label class="block mb-2">Location</label>
+        <select class="w-full p-2 border rounded">
+            <option value="">Choose city</option>
+            <option value="Barisal">Barisal</option>
+            <option value="Bagerhat">Bagerhat</option>
+            <option value="Brahmanbaria">Brahmanbaria</option>
+            <option value="Chandpur">Chandpur</option>
+            <option value="Chattogram">Chattogram</option>
+            <option value="Chuadanga">Chuadanga</option>
+            <option value="Comilla">Comilla</option>
+            <option value="Cumilla">Cumilla</option>
+            <option value="Dhaka">Dhaka</option>
+            <option value="Dinajpur">Dinajpur</option>
+            <option value="Faridpur">Faridpur</option>
+            <option value="Feni">Feni</option>
+            <option value="Habiganj">Habiganj</option>
+            <option value="Jamuna">Jamuna</option>
+            <option value="Jhalokathi">Jhalokathi</option>
+            <option value="Jessore">Jessore</option>
+            <option value="Khagrachari">Khagrachari</option>
+            <option value="Khulna">Khulna</option>
+            <option value="Kushtia">Kushtia</option>
+            <option value="Kurigram">Kurigram</option>
+            <option value="Lakshmipur">Lakshmipur</option>
+            <option value="Magura">Magura</option>
+            <option value="Manikganj">Manikganj</option>
+            <option value="Madaripur">Madaripur</option>
+            <option value="Meherpur">Meherpur</option>
+            <option value="Moulvibazar">Moulvibazar</option>
+            <option value="Mymensingh">Mymensingh</option>
+            <option value="Naogaon">Naogaon</option>
+            <option value="Narayanganj">Narayanganj</option>
+            <option value="Netrakona">Netrakona</option>
+            <option value="Netrokona">Netrokona</option>
+            <option value="Noakhali">Noakhali</option>
+            <option value="Pabna">Pabna</option>
+            <option value="Panchagarh">Panchagarh</option>
+            <option value="Patukhali">Patuakhali</option>
+            <option value="Rajbari">Rajbari</option>
+            <option value="Rajshahi">Rajshahi</option>
+            <option value="Rangamati">Rangamati</option>
+            <option value="Rangpur">Rangpur</option>
+            <option value="Satkhira">Satkhira</option>
+            <option value="Shariatpur">Shariatpur</option>
+            <option value="Sherpur">Sherpur</option>
+            <option value="Sunamganj">Sunamganj</option>
+            <option value="Sylhet">Sylhet</option>
+            <option value="Tangail">Tangail</option>
+            <option value="Tangail">Tangail</option>
+            <option value="Thakurgaon">Thakurgaon</option>
+        </select>
+
+
+    </select>
+</div>
+
+<div class="mb-4">
+    <h3 class="font-semibold mb-2">Category</h3>
+    <div class="space-y-2">
+        <label class="flex items-center">
+            <input id="category-commerce" name="category" value="Commerce" class="mr-2" type="checkbox" />
+            Commerce
+        </label>
+        <label class="flex items-center">
+            <input id="category-telecom" name="category" value="Telecommunications" class="mr-2" type="checkbox" />
+            Telecommunications
+        </label>
+        <label class="flex items-center">
+            <input id="category-hotels" name="category" value="Hotels & Tourism" class="mr-2" type="checkbox" />
+            Hotels & Tourism
+        </label>
+        <label class="flex items-center">
+            <input id="category-education" name="category" value="Education" class="mr-2" type="checkbox" />
+            Education
+        </label>
+        <label class="flex items-center">
+            <input id="category-financial" name="category" value="Financial Services" class="mr-2" type="checkbox" />
+            Financial Services
+        </label>
+    </div>
+    <button class="mt-4 text-green-500">Show More</button>
+</div>
+
+<div class="mb-4">
+    <h3 class="font-semibold mb-2">Job Type</h3>
+    <div class="space-y-2">
+        <label class="flex items-center">
+            <input id="job-fulltime" name="job-type" value="Full Time" class="mr-2" type="checkbox" />
+            Full Time
+        </label>
+        <label class="flex items-center">
+            <input id="job-parttime" name="job-type" value="Part Time" class="mr-2" type="checkbox" />
+            Part Time
+        </label>
+        <label class="flex items-center">
+            <input id="job-freelance" name="job-type" value="Freelance" class="mr-2" type="checkbox" />
+            Freelance
+        </label>
+        <label class="flex items-center">
+            <input id="job-seasonal" name="job-type" value="Seasonal" class="mr-2" type="checkbox" />
+            Seasonal
+        </label>
+        <label class="flex items-center">
+            <input id="job-fixedprice" name="job-type" value="Fixed-Price" class="mr-2" type="checkbox" />
+            Fixed-Price
+        </label>
+    </div>
+</div>
+
+<div class="mb-4">
+    <h3 class="font-semibold mb-2">Salary</h3>
+    <div class="flex items-center">
+        <input id="salary-range" name="salary" class="w-full" max="99999" min="0" type="range" />
+        <span id="salary-display" class="ml-2">Salary: $0 - $99999</span>
+    </div>
+    <button id="apply-filter" class="mt-4 bg-green-500 text-white py-1 px-4 rounded">Apply</button>
+</div>
+
         </aside>
         <section class="w-full lg:w-3/4 lg:pl-6">
             <div class="flex justify-between items-center mb-6">
@@ -367,6 +261,38 @@
         }
     });
     });
+
+//     $('#apply-filter').click(function (event) {
+//     event.preventDefault();
+
+//     const action = 'applyFilter';
+//     const filters = {};
+
+//     // Collect checkbox values
+//     filters.categories = [];
+//     $('input[name="category"]:checked').each(function () {
+//         filters.categories.push($(this).val());
+//     });
+
+//     filters.jobTypes = [];
+//     $('input[name="job-type"]:checked').each(function () {
+//         filters.jobTypes.push($(this).val());
+//     });
+
+//     // Collect range value
+//     filters.salary = $('#salary-range').val();
+
+//     // Send data via Ajax
+//     $.ajax({
+//         url: "job-action.php",
+//         method: "POST",
+//         data: { action: action, filters: filters },
+//         success: function (data) {
+//             $('#job-show').html(data);
+//         }
+//     });
+// });
+
 
     function subscribeNewsletter() {
         alert('Thank you for subscribing to our newsletter!');

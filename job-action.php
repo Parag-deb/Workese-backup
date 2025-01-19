@@ -9,13 +9,40 @@ if (isset($_POST['action'])) {
         echo $output; // Echo the output here
     }
     //Search By Employee Name
-//     if($_POST['action'] == 'searchRecord'){
-//         $job_title = $_POST['job_title'];
-//         $query = "SELECT * FROM jobs WHERE job_title LIKE '%$job_title%'";
-//         $output = getData($query);
-//         echo $output;
-//     }
- }
+    if($_POST['action'] == 'searchRecord'){
+        $job_title = $_POST['job_title'];
+        $query = "SELECT * FROM jobs WHERE job_title LIKE '%$job_title%'";
+        $output = getData($query);
+        echo $output;
+    }
+
+    // apply checkbox filtering
+    // if ($_POST['action'] == 'applyFilter') {
+    //     $filters = $_POST['filters'];
+    
+    //     $query = "SELECT * FROM jobs WHERE 1=1";
+    
+    //     if (!empty($filters['categories'])) {
+    //         $categories = implode("','", array_map('mysqli_real_escape_string', $filters['categories']));
+    //         $query .= " AND category IN ('$categories')";
+    //     }
+    
+    //     if (!empty($filters['jobTypes'])) {
+    //         $jobTypes = implode("','", array_map('mysqli_real_escape_string', $filters['jobTypes']));
+    //         $query .= " AND jobType IN ('$jobTypes')";
+    //     }
+    
+    //     if (!empty($filters['salary'])) {
+    //         $salary = (int) $filters['salary'];
+    //         $query .= " AND salary <= $salary";
+    //     }
+    
+    //     $output = getData($query);
+    //     echo $output;
+    // }
+    
+    
+}
 
 function getData($query) {
     include("connect.php");
@@ -50,10 +77,17 @@ function getData($query) {
 
                             </div>
                         </div>
-                    </div>
-                    <button class="bg-[rgb(34,197,94)] text-white py-2 px-4 rounded job-details hover:bg-green-600">
-                        Job Details
-                    </button>
+                         </div>
+            <button 
+                class="bg-[rgb(34,197,94)] text-white py-2 px-4 rounded job-details hover:bg-green-600" 
+                onclick="window.location.href=\'job-details.php?job_id=' . $row['job_id'] . '\'">
+                Job Details
+            </button>
+
+
+
+
+
                 </div>
             </div>
             ';
