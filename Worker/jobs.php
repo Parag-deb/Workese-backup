@@ -1,12 +1,12 @@
 <?php
-    require 'connect.php';
+    require '../connect.php';
     if(!session_start()){
         header('Location:login.php');
     }else{
        // session_start();
     }
 
-    include 'nav.php';
+    include '../nav.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +24,7 @@
         }
     </style>
 </head>
-<!-- 
+
 <header class="bg-black text-white">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
         <div class="flex items-center">
@@ -39,10 +39,10 @@
                 <a class="hover:text-gray-400" href="/contact us/index.html">Contact Us</a>
             </div>
         </nav>
-    User Profile and Authentication
-     <div class="flex items-center space-x-4">
+    <!-- User Profile and Authentication -->
+    <div class="flex items-center space-x-4">
     <?php if (isset($_SESSION['name'])) { ?>
-        Logged-in User Section
+        <!-- Logged-in User Section -->
         <span class="mr-2">
             <?php echo htmlspecialchars($_SESSION['name'] ?? 'users'); ?>
         </span>
@@ -70,7 +70,7 @@
     <?php } ?>
 </div>
     </div>
-</header> -->
+</header>
 <body class="bg-gray-100">
 <main class="container mx-auto mt-8 px-6">
     <div class="flex flex-col lg:flex-row">

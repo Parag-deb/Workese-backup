@@ -9,7 +9,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
 </head>
 <body class="bg-gray-100">
-    <nav class="bg-black text-white p-4">
+<?php include 'nav.php'; ?>
+    <!-- <nav class="bg-black text-white p-4">
         <div class="container mx-auto flex justify-between items-center">
             <div class="text-lg font-bold">WORKESE</div>
             <div class="hidden md:flex space-x-4">
@@ -28,13 +29,11 @@
                 </button>
             </div>
         </div>
-    </nav>
+    </nav> -->
     <div class="container mx-auto p-4">
         <div class="flex flex-col lg:flex-row">
             <!-- Sidebar -->
             <div class="w-full lg:w-1/4 bg-white p-4 rounded-lg shadow-md">
-                <!-- Sidebar content -->
-                <div class="w-full lg:w-1/4 bg-white p-4 rounded-lg shadow-md">
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="job-title">Search by Job Title</label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="job-title" placeholder="Job title or company" type="text"/>
@@ -58,7 +57,7 @@
                         </label>
                         <label class="inline-flex items-center">
                             <input class="form-checkbox text-indigo-600" type="checkbox"/>
-                            <span class=" ml-2">Hotels & Tourism</span>
+                            <span class="ml-2">Hotels & Tourism</span>
                         </label>
                         <label class="inline-flex items-center">
                             <input class="form-checkbox text-indigo-600" type="checkbox"/>
@@ -141,7 +140,7 @@
                             <span class="ml-2">Last 30 Days</span>
                         </label>
                     </div>
-                 
+                </div>
             </div>
             <!-- Main Content -->
             <div class="w-full lg:w-3/4 p-4">
@@ -151,11 +150,7 @@
             </div>
         </div>
     </div>
-    <footer class="bg-black text-white mt-8 p-4">
-        <div class="container mx-auto text-center">
-            <p>© 2023 Worker Portal. All rights reserved.</p>
-        </div>
-    </footer>
+    <?php include 'footer.php'; ?>
     <script>
         $(document).ready(function() {
             fetchData(); // Call the function to fetch data on page load

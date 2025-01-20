@@ -1,6 +1,5 @@
 <?php 
 include 'connect.php';
-include 'nav.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if required fields are set
@@ -19,6 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone = $conn->real_escape_string($_POST['phone']);
     $gender = $conn->real_escape_string($_POST['gender']);
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password
+    $role = $conn->real_escape_string($_POST['role']);
     $description = $conn->real_escape_string($_POST['description']);
     $division = $conn->real_escape_string($_POST['division']);
     $district = $conn->real_escape_string($_POST['district']);
@@ -44,19 +44,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     // Insert data into the users table
-    $sql = "INSERT INTO users (name, email, date_of_birth, phone, gender, password, description, division, district, upazila, address, education_title, education_degree, education_institute, education_year, facebook, instagram, linkedin, whatsapp_number, expertise_title, expertise_level) 
-            VALUES ('$name', '$email', '$date_of_birth', '$phone', '$gender', '$password', '$description', '$division', '$district', '$upazila', '$address', '$education_title', '$education_degree', '$education_institute', '$education_year', '$facebook', '$instagram', '$linkedin', '$whatsapp_number', '$expertise_title', '$expertise_level')";
+    $sql = "INSERT INTO users (name, email, date_of_birth, phone, gender, password,  description, division, district, upazila, address, education_title, education_degree, education_institute, education_year, facebook, instagram, linkedin, whatsapp_number, expertise_title, expertise_level, role) 
+            VALUES ('$name', '$email', '$date_of_birth', '$phone', '$gender', '$password',  '$description', '$division', '$district', '$upazila', '$address', '$education_title', '$education_degree', '$education_institute', '$education_year', '$facebook', '$instagram', '$linkedin', '$whatsapp_number', '$expertise_title', '$expertise_level', '$role')";
 
 if ($conn->query($sql) === TRUE) {
     // Registration successful, redirect to login page with a success message
-    echo "<script>alert('Registration successful!'); 
-    //window.location.href='create-account.php';</script>";
-    exit();
+    echo "<script>
+        alert('Registration successful!');
+        window.location.href = '/login.php';
+    </script>";
+    // Alternatively, you can use a PHP header for redirection
+    header("Location: login.php");
+    exit(); // Ensure the script stops executing after redirection
 } else {
     // Registration failed
     $error = "Error: " . $sql . "<br>" . $conn->error;
 }
 }
+
 
 // Close the connection
 $conn->close();
@@ -72,7 +77,7 @@ $conn->close();
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
 </head>
 <body class="font-roboto">
-<!-- <header class="bg-black text-white">
+<header class="bg-black text-white">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
         <div class="flex items-center">
             <img alt="Logo" class="mr-2" height="30" src="https://storage.googleapis.com/a1aa/image/E7INiQyIjO4fSicCYTqEpeAs0KSSXxpD0JWRytVGIjzegqEoA.jpg" width="30"/>
@@ -87,11 +92,15 @@ $conn->close();
             </div>
         </nav>
         <div class="space-x-4">
-            <button class="bg-transparent border border-white py-1 px-4 rounded hover:bg-white hover:text-black">Login</button>
+            <!-- Register Button -->
             <button class="bg-green-500 py-1 px-4 rounded hover:bg-green-600">Register</button>
-        </div>
+
+            <!-- Login Button -->
+            <button class="bg-green-700 py-1 px-4 rounded hover:bg-green-500">Login</button>
+</div>
+
     </div>
-</header> -->
+</header>
 
 <main class="bg-cover bg-center" style="background-image: url('https://placehold.co/1920x400');">
     <div class="container mx-auto text-center py-20 px-4">
@@ -110,9 +119,19 @@ $conn->close();
                     <input class="border p-2 w-full" name="email" placeholder="Your email:" type="email" required/>
                     <input class="border p-2 w-full" name="date_of_birth" placeholder="Date of birth:" type="date" required/>
                     <input class="border p-2 w-full" name="phone" placeholder="Your phone:" type="text" required/>
-                    <input class="border p-2 w-full" name="gender" placeholder="Gender:" type="text" required/>
+                    <select id="gender" name="gender" class="border p-2 w-full" required>
+                        <option value="" disabled selected>Select your gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
                     <input class="border p-2 w-full" name="password" placeholder="Password:" type="password" required/>
                     <input class="border p-2 w-full" name="confirm_password" placeholder="Confirm Password:" type="password" required/>
+                    <select id="role" name="role" class="border p-2 w-full" required>
+                        <option value="" disabled selected>Select your role</option>
+                        <option value="worker">worker</option>
+                        <option value="recruiter">recruiter</option>
+                    </select>
+
                     <textarea class="border p-2 w-full h-24 md:col-span-2" name="description" placeholder="Description:" required></textarea>
                 </div>
             </div>
@@ -121,10 +140,89 @@ $conn->close();
             <h2 class="text-xl font-bold mb-4">Locations</h2>
             <div class="border p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input class="border p-2 w-full" name="division" placeholder="Division:" type="text" required/>
-                    <input class="border p-2 w-full" name="district" placeholder="District:" type="text" required/>
-                    <input class="border p-2 w-full" name="upazila" placeholder="Upazila:" type="text" required/>
-                    <input class="border p-2 w-full" name=" address" placeholder="Address:" type="text" required/>
+                    <!-- Division Dropdown -->
+                    <select id="division" name="division" class="border p-2 w-full" required>
+                        <option value="" disabled selected>Select your division</option>
+                        <option value="Barisal">Barisal</option>
+                        <option value="Chattogram">Chattogram</option>
+                        <option value="Dhaka">Dhaka</option>
+                        <option value="Khulna">Khulna</option>
+                        <option value="Mymensingh">Mymensingh</option>
+                        <option value="Rajshahi">Rajshahi</option>
+                        <option value="Rangpur">Rangpur</option>
+                        <option value="Sylhet">Sylhet</option>
+                    </select>
+
+                    <!-- District Dropdown -->
+                    <select id="district" name="district" class="border p-2 w-full" required>
+                        <option value="" disabled selected>Select your district</option>
+                        <option value="Bagerhat">Bagerhat</option>
+                        <option value="Bandarban">Bandarban</option>
+                        <option value="Barguna">Barguna</option>
+                        <option value="Barishal">Barishal</option>
+                        <option value="Bhola">Bhola</option>
+                        <option value="Bogura">Bogura</option>
+                        <option value="Brahmanbaria">Brahmanbaria</option>
+                        <option value="Chandpur">Chandpur</option>
+                        <option value="Chattogram">Chattogram</option>
+                        <option value="Chuadanga">Chuadanga</option>
+                        <option value="Cox's Bazar">Cox's Bazar</option>
+                        <option value="Cumilla">Cumilla</option>
+                        <option value="Dhaka">Dhaka</option>
+                        <option value="Dinajpur">Dinajpur</option>
+                        <option value="Faridpur">Faridpur</option>
+                        <option value="Feni">Feni</option>
+                        <option value="Gaibandha">Gaibandha</option>
+                        <option value="Gazipur">Gazipur</option>
+                        <option value="Gopalganj">Gopalganj</option>
+                        <option value="Habiganj">Habiganj</option>
+                        <option value="Jamalpur">Jamalpur</option>
+                        <option value="Jashore">Jashore</option>
+                        <option value="Jhalokati">Jhalokati</option>
+                        <option value="Jhenaidah">Jhenaidah</option>
+                        <option value="Joypurhat">Joypurhat</option>
+                        <option value="Khagrachari">Khagrachari</option>
+                        <option value="Khulna">Khulna</option>
+                        <option value="Kishoreganj">Kishoreganj</option>
+                        <option value="Kurigram">Kurigram</option>
+                        <option value="Kushtia">Kushtia</option>
+                        <option value="Lakshmipur">Lakshmipur</option>
+                        <option value="Lalmonirhat">Lalmonirhat</option>
+                        <option value="Madaripur">Madaripur</option>
+                        <option value="Magura">Magura</option>
+                        <option value="Manikganj">Manikganj</option>
+                        <option value="Meherpur">Meherpur</option>
+                        <option value="Moulvibazar">Moulvibazar</option>
+                        <option value="Munshiganj">Munshiganj</option>
+                        <option value="Mymensingh">Mymensingh</option>
+                        <option value="Naogaon">Naogaon</option>
+                        <option value="Narail">Narail</option>
+                        <option value="Narayanganj">Narayanganj</option>
+                        <option value="Narsingdi">Narsingdi</option>
+                        <option value="Natore">Natore</option>
+                        <option value="Netrokona">Netrokona</option>
+                        <option value="Nilphamari">Nilphamari</option>
+                        <option value="Noakhali">Noakhali</option>
+                        <option value="Pabna">Pabna</option>
+                        <option value="Panchagarh">Panchagarh</option>
+                        <option value="Patuakhali">Patuakhali</option>
+                        <option value="Pirojpur">Pirojpur</option>
+                        <option value="Rajbari">Rajbari</option>
+                        <option value="Rajshahi">Rajshahi</option>
+                        <option value="Rangamati">Rangamati</option>
+                        <option value="Rangpur">Rangpur</option>
+                        <option value="Satkhira">Satkhira</option>
+                        <option value="Shariatpur">Shariatpur</option>
+                        <option value="Sherpur">Sherpur</option>
+                        <option value="Sirajganj">Sirajganj</option>
+                        <option value="Sunamganj">Sunamganj</option>
+                        <option value="Sylhet">Sylhet</option>
+                        <option value="Tangail">Tangail</option>
+                        <option value="Thakurgaon">Thakurgaon</option>
+                    </select>
+
+                    <input class="border p-2 w-full" name="upazila" placeholder="Upazila:" type="text" />
+                    <input class="border p-2 w-full" name=" address" placeholder="Address:" type="text"/>
                 </div>
             </div>
         </div>
@@ -155,7 +253,13 @@ $conn->close();
             <div class="border p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <input class="border p-2 w-full" name="expertise_title" placeholder="Expertise Title:" type="text" required/>
-                    <input class="border p-2 w-full" name="expertise_level" placeholder="Expertise Level:" type="text" required/>
+                    <select id="expertise_level" name="expertise_level" class="border p-2 w-full" required>
+                    <option value="" disabled selected>Select your expertise level</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Pro">Pro</option>
+                    </select>
+
                 </div>
             </div>
         </div>

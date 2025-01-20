@@ -1,6 +1,10 @@
 <?php
 session_start();
 require 'connect.php';
+if(isset($_SESSION["user"])){
+    //header("Location:index.php");
+    echo 'index.php';
+}
 // Start session
 
 
@@ -31,12 +35,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['id']= $user['id'];
             $_SESSION['email']=$user['email'];
             $_SESSION['name']=$user['name'];
-            header("Location:post-a-job.php");
-            die();
-        }
-        else {
-                    echo "<script>alert('Incorrect password!');</script>";
+            $_SESSION['role']=$user['role'];
+            // header("Location:post-a-job.php");
+            // die();
+             // Redirect based on role
+             if ($user['role'] === 'worker') {
+                header("Location: Worker/home-worker.php");
+                exit;
+            } elseif ($user['role'] === 'recruiter') {
+                header("Location: recruiter/home-recruiter.php");
+                exit;
+            } else {
+                header("Location: /admin/dashboard.php");
+                exit;
+            }
+            
+                    exit();
+                } else {
+                    echo "<script>alert('Incorrect password!'); window.location.href = 'index.html';</script>";
                 }
+            } else {
+                echo "<script>alert('No account found with this email!'); window.location.href = 'index.html';</script>";
+        }
+        
+                    echo "<script>alert('Incorrect password!');</script>";
+      
     }
 
     // Prepare and execute the query
@@ -72,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     //     echo "<script>alert('No account found with this email!'); window.location.href = 'index.html';</script>";
     // }
     // $stmt->close();
-}
+
 
 // Close the database connection
 $conn->close();
@@ -96,10 +119,10 @@ $conn->close();
       <span class="font-bold">WORKESE</span>
     </div>
     <div class="hidden md:flex space-x-4">
-      <a class="hover:text-gray-400" href="/home/index.html">Home</a>
-      <a class="hover:text-gray-400" href="/jobs/index.html">Jobs</a>
-      <a class="hover:text-gray-400" href="/about us/index.html">About Us</a>
-      <a class="hover:text-gray-400" href="/contact us/index.html">Contact Us</a>
+      <a class="hover:text-gray-400" href="index.php">Home</a>
+      <a class="hover:text-gray-400" href="login.php">Jobs</a>
+      <a class="hover:text-gray-400" href="about-us.php">About Us</a>
+      <a class="hover:text-gray-400" href="contact-us.php">Contact Us</a>
     </div>
     <div class="flex space-x-4">
       <a class="hover:text-gray-400" href="/log in/index.html">Login</a>
@@ -113,11 +136,11 @@ $conn->close();
     <div class="bg-teal-500 p-8 rounded-lg mt-8 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8">
       <div class="bg-white p-8 rounded-lg text-center">
         <h2 class="font-bold">Worker Login</h2>
-        <button class="bg-teal-500 text-white px-4 py-2 mt-4 rounded">Get Started</button>
+        <button class="bg-teal-500 text-white px-4 py-2 mt-4 rounded" onclick="window.location.href='login.php'">Get Started</button>
       </div>
       <div class="bg-white p-8 rounded-lg text-center">
         <h2 class="font-bold">Employer Login</h2>
-        <button class="bg-teal-500 text-white px-4 py-2 mt-4 rounded">Get Started</button>
+        <button class="bg-teal-500 text-white px-4 py-2 mt-4 rounded" onclick="window.location.href='login.php'">Get Started</button>
       </div>
     </div>
     <div class="bg-white p-8 rounded-lg mt-8 w-full max-w-md">

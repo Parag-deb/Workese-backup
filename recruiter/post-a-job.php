@@ -2,8 +2,8 @@
 session_start(); // Start a session
 
 // Include database connection
-include 'connect.php'; // Ensure this file connects to your database
-include 'nav.php';
+include '../connect.php'; // Ensure this file connects to your database
+include '../nav.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect and sanitize input data
     $company_name = $conn->real_escape_string($_POST['company_name']);

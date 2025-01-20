@@ -1,40 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Job Portal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-        }
-    </style>
-</head>
-<body class="bg-gray-100">
-<header class="bg-black text-white">
-    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-        <div class="text-lg font-bold">WORKESE</div>
-        <nav class="space-x-4">
-            <div class="hidden md:flex space-x-4">
-                <a class="hover:text-gray-400" href="index.php">Home</a>
-                <a class="hover:text-gray-400" href="login.php">Jobs</a>
-                <a class="hover:text-gray-400" href="about-us.php">About Us</a>
-                <a class="hover:text-gray-400" href="contact-us.php">Contact Us</a>
-            </div>
-        </nav>
-        <div class="space-x-4">
-            <a class="hover:text-teal-400" href="login.php">Login</a>
-            <a class="bg-[rgb(34,197,94)] text-white px-4 py-2 rounded hover:bg-green-600" href="create-account.php">Register</a>
-        </div>
-        
-        
-        
-    </div>
-</header>
-<section class="bg-cover bg-center text-center py-20" style="background-image: url('images/bg.jpeg')">
+<?php
+    require '../connect.php';
+    session_start();
+    include '../nav.php';
+?>
+
+<section class="bg-cover bg-center text-center py-20" style="background-image: url('../Images/bg.jpeg')">
     <div class="container mx-auto px-4">
         <h1 class="text-4xl font-bold text-white">Find Your Dream Job Today!</h1>
         <p class="text-white mt-4">Connecting Talent with Opportunity: Your Gateway to Career Success</p>
@@ -52,7 +22,7 @@
                 <option value="financial-services">Financial Services</option>
                 <option value="transport">Transport</option>
             </select>
-            <button id="search-job" class="bg-[rgb(34,197,94)] text-white px-6 py-2 rounded hover:bg-green-600" onclick="window.location.href='/jobs/index.html'">
+            <button id="search-job" class="bg-[rgb(34,197,94)] text-white px-6 py-2 rounded hover:bg-green-600" onclick="window.location.href='jobs.php'">
                 Search Job
             </button>
             
@@ -79,26 +49,26 @@
         <div class="bg-white text-black p-8 rounded shadow-md text-center">
             <h2 class="text-xl font-bold">Jobseeker</h2>
             <p>Looking for a job?</p>
-            <button class="bg-[rgb(34,197,94)] text-white px-4 py-2 mt-4 rounded hover:bg-green-600" onclick="window.location.href='login.php'">
+            <button class="bg-[rgb(34,197,94)] text-white px-4 py-2 mt-4 rounded hover:bg-green-600" onclick="window.location.href='jobs.php'">
                 Apply Now
             </button>
             
         </div>
-        <div class="bg-white text-black p-8 rounded shadow-md text-center">
+        <!-- <div class="bg-white text-black p-8 rounded shadow-md text-center">
             <h2 class="text-xl font-bold">Recruiter</h2>
             <p>Are You Recruiting?</p>
-            <button class="bg-[rgb(34,197,94)] text-white px-4 py-2 mt-4 rounded hover:bg-green-600" onclick="window.location.href='login.php'">
+            <button class="bg-[rgb(34,197,94)] text-white px-4 py-2 mt-4 rounded hover:bg-green-600" onclick="window.location.href='/create a job/index.html'">
                 Post A Job
             </button>
             
-        </div>
+        </div> -->
     </div>
 </section>
 <section class="py-12">
     <div class="container mx-auto px-4">
         <div class="flex justify-between items-center">
             <h2 class="text-2xl font-bold">Recent Jobs Available</h2>
-            <a class="text-teal-500 hover:underline" href="login.php">View all</a>
+            <a class="text-teal-500 hover:underline" href="jobs.php">View all</a>
         </div>
         <p class="text-gray-600 mt-2">At eu lobortis pretium tincidunt amet lacus ut aenean aliquet...</p>
         <div class="mt-8 space-y-4">
@@ -129,7 +99,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="bg-[rgb(34,197,94)] text-white px-4 py-2 rounded hover:bg-green-600" onclick="window.location.href='login.php'">
+                <button class="bg-[rgb(34,197,94)] text-white px-4 py-2 rounded hover:bg-green-600" onclick="window.location.href='/job details/index.html'">
                     Job Details
                 </button>
                 
@@ -161,7 +131,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="bg-[rgb(34,197,94)] text-white px-4 py-2 rounded hover:bg-green-600" onclick="window.location.href='login.php'">
+                <button class="bg-[rgb(34,197,94)] text-white px-4 py-2 rounded hover:bg-green-600" onclick="window.location.href='/job details/index.html'">
                     Job Details
                 </button>
                 
@@ -193,7 +163,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="bg-[rgb(34,197,94)] text-white px-4 py-2 rounded hover:bg-green-600" onclick="window.location.href='login.php'">
+                <button class="bg-[rgb(34,197,94)] text-white px-4 py-2 rounded hover:bg-green-600" onclick="window.location.href='/job details/index.html'">
                     Job Details
                 </button>
                 
@@ -225,7 +195,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="bg-[rgb(34,197,94)] text-white px-4 py-2 rounded hover:bg-green-600" onclick="window.location.href='login.php'">
+                <button class="bg-[rgb(34,197,94)] text-white px-4 py-2 rounded hover:bg-green-600" onclick="window.location.href='/job details/index.html'">
                     Job Details
                 </button>
                 
@@ -257,7 +227,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="bg-[rgb(34,197,94)] text-white px-4 py-2 rounded hover:bg-green-600" onclick="window.location.href='login.php.html'">
+                <button class="bg-[rgb(34,197,94)] text-white px-4 py-2 rounded hover:bg-green-600" onclick="window.location.href='/job details/index.html'">
                     Job Details
                 </button>
                 
@@ -320,11 +290,11 @@
             <h2 class="text-2xl font-bold">Good Life Begins With A Good Company</h2>
             <p class="text-gray-600 mt-4">Ultrices purus dolor viverra mi scelerisque at mauris justo. Ultrices purus diam egestas amet faucibus tempor blandit. Elit vitae mi mauris aliquam et diam. Leo sagittis consectetur diam mi morbi et aenean. Vulputate praesent congue faucibus in euismod feugiat euismod volutpat...</p>
             <div class="mt-8 flex space-x-4">
-                <button class="bg-[rgb(34,197,94)] text-white px-6 py-2 rounded hover:bg-green-600" onclick="window.location.href='login.php'">
+                <button class="bg-[rgb(34,197,94)] text-white px-6 py-2 rounded hover:bg-green-600" onclick="window.location.href='jobs.php'">
                     Search Job
                 </button>
                 
-                <button class="bg-gray-200 text-gray-700 px-6 py-2 rounded hover:bg-gray-300" onclick="window.location.href='about-us.php'">
+                <button class="bg-gray-200 text-gray-700 px-6 py-2 rounded hover:bg-gray-300" onclick="window.location.href='../about-us.php'">
                     Learn more
                 </button>
             </div>
@@ -346,6 +316,9 @@
             </div>
             <div>
                 <div class="text-3xl font-bold text-teal-500">18k</div>
+                <div class="text-gray-600 mt-2">Active resume</div>
+                <p class="text-gray-500 mt-2">At eu lobortis pretium tincidunt amet lacus ut aenean aliquet. Blandit a massa elementum id scelerisque...</p>
+            </div>
             </div>
         </div>
     </div>

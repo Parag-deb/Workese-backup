@@ -1,6 +1,8 @@
 <?php
-require 'connect.php';
-//include 'nav.php';
+include "../connect.php";
+session_start();
+include '../nav.php';
+
 // Get the job_id from the query string
 if (isset($_GET['job_id'])) {
     $job_id = intval($_GET['job_id']);
@@ -37,24 +39,21 @@ if (isset($_GET['job_id'])) {
 </head>
 <header class="bg-black text-white p-4 flex justify-between items-center">
     <div class="flex items-center">
-     <img alt="Logo" class="mr-2" height="40" src="https://storage.googleapis.com/a1aa/image/mn5r6cMFAlLWMNwewZpktc1jabziQDdvdPI3mfFVAzgxuUCUA.jpg" width="40"/>
-     <span class="text-xl font-bold">
+     <!-- <img alt="Logo" class="mr-2" height="40" src="https://storage.googleapis.com/a1aa/image/mn5r6cMFAlLWMNwewZpktc1jabziQDdvdPI3mfFVAzgxuUCUA.jpg" width="40"/> -->
+     <!-- <span class="text-xl font-bold">
          WORKESE
-     </span>
+     </span> -->
     </div>
-    <nav class="flex space-x-4">
+    <!-- <nav class="flex space-x-4">
         <div class="hidden md:flex space-x-4">
             <a class="hover:text-gray-400" href="/home/index.html">Home</a>
             <a class="hover:text-gray-400" href="/jobs/index.html">Jobs</a>
             <a class="hover:text-gray-400" href="/about us/index.html">About Us</a>
             <a class="hover:text-gray-400" href="/contact us/index.html">Contact Us</a>
         </div>
-    </nav>
+    </nav> -->
     <div class="flex items-center">
-     <span class="mr-2">
-      Parag
-     </span>
-     <img alt="User Avatar" class="rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/lyou4ghwI2rfFSOMEefw0VROzQIkdIGqehYskzfb92Fn3lSgC.jpg" width="40"/>
+
     </div>
    </header>
 <!-- <body>
@@ -109,7 +108,7 @@ if (isset($_GET['job_id'])) {
                             </div>
                         </div>
                     </div>
-                    <button class="bg-green-500 text-white px-4 py-2 rounded-lg mt-4 lg:mt-0" onclick="window.location.href='/after applying job Button/index.html'">Apply Job</button>
+                    <button class="bg-green-500 text-white px-4 py-2 rounded-lg mt-4 lg:mt-0" onclick="window.location.href='expected-salary.php '">Apply Job</button>
                 </div>
                 <div class="mt-6">
                     <h2 class="text-xl font-semibold">Job Description</h2>
