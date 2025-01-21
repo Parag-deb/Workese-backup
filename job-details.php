@@ -4,7 +4,7 @@ require 'connect.php';
 // Get the job_id from the query string
 if (isset($_GET['job_id'])) {
     $job_id = intval($_GET['job_id']);
-
+    $_SESSION ['job_id'] = $job_id;
     // Fetch the job details from the database
     $query = "SELECT * FROM jobs WHERE job_id = $job_id";
     $result = mysqli_query($conn, $query);

@@ -3,10 +3,10 @@ include "../connect.php";
 session_start();
 include '../nav.php';
 
-// Get the job_id from the query string
+//Get the job_id from the query string
 if (isset($_GET['job_id'])) {
     $job_id = intval($_GET['job_id']);
-
+    $_SESSION ['job_id'] = $job_id;
     // Fetch the job details from the database
     $query = "SELECT * FROM jobs WHERE job_id = $job_id";
     $result = mysqli_query($conn, $query);
@@ -21,6 +21,32 @@ if (isset($_GET['job_id'])) {
     echo "No job ID provided!";
     exit;
 }
+// if (isset($_GET['job_id'])) {
+//     $job_id = intval($_GET['job_id']); // Get the job ID from the URL
+//     $_SESSION['job_id'] = $job_id; // Save the job ID to the session
+
+//     // Fetch the job details from the database
+//     $query = "SELECT * FROM jobs WHERE job_id = ?";
+//     $stmt = $conn->prepare($query);
+//     $stmt->bind_param("i", $job_id); // Bind the job ID parameter
+//     $stmt->execute();
+//     $result = $stmt->get_result();
+
+//     if ($result && mysqli_num_rows($result) > 0) {
+//         $job = mysqli_fetch_assoc($result); // Fetch job details
+//     } else {
+//         echo "Job not found!";
+//         exit;
+//     }
+// } else {
+//     echo "No job ID provided!";
+//     exit;
+// }
+// // Assuming you have a job listing page where users can select a job
+
+// $_SESSION['job_id'] = $selectedJobId; // Set the job ID when a job is selected
+// header("Location: ../apply-job.php"); // Redirect to the application page
+// exit;
 ?>
 
 <html lang="en">
@@ -108,8 +134,7 @@ if (isset($_GET['job_id'])) {
                             </div>
                         </div>
                     </div>
-                    <button class="bg-green-500 text-white px-4 py-2 rounded-lg mt-4 lg:mt-0" onclick="window.location.href='expected-salary.php '">Apply Job</button>
-                </div>
+                    <button class="bg-green-500 text-white px-4 py-2 rounded-lg mt-4 lg:mt-0" onclick="window.location.href='../apply-job.php?job_id=<?php echo $job['job_id']; ?>'">Apply Job</button>                </div>
                 <div class="mt-6">
                     <h2 class="text-xl font-semibold">Job Description</h2>
                     <p class="mt-2 text-gray-600">

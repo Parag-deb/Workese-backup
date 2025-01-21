@@ -45,17 +45,19 @@ if (isset($_POST['action'])) {
 
         if ($result->num_rows > 0) {
             while ($job = $result->fetch_assoc()) {
-                // Output job details as needed
-                $output .= "<div class='worker-card bg-white p-4 rounded shadow-md'>";
-                $output .= "<h3 class='font-bold'>" . htmlspecialchars($job['job_title']) . "</h3>";
-                $output .= "<p>Company: " . htmlspecialchars($job['company_name']) . "</p>";
-                $output .= "<p>Location: " . htmlspecialchars($job['location']) . "</p>";
-                $output .= "<p>Salary Range: " . htmlspecialchars($job['salary_range']) . "</p>";
-                $output .= "<p>Job Type: " . htmlspecialchars($job['job_type']) . "</p>";
-                $output .= "<button class='bg-[rgb(34,197,94)] text-white py-2 px-4 rounded job-details hover:bg-green-600' 
-                onclick=\"window.location.href='job-details.php?job_id=" . $job['job_id'] . "'\">
-                Job Details
-            </button>";
+        // Output job details as needed
+        $output .= "<div class='worker-card bg-white p-4 rounded shadow-md flex justify-between items-center'>";
+        $output .= "<div class='flex-grow'>"; // This allows the content to take up available space
+        $output .= "<h3 class='font-bold'>" . htmlspecialchars($job['job_title']) . "</h3>";
+        $output .= "<p>Company: " . htmlspecialchars($job['company_name']) . "</p>";
+        $output .= "<p>Location: " . htmlspecialchars($job['location']) . "</p>";
+        $output .= "<p>Salary Range: " . htmlspecialchars($job['salary_range']) . "</p>";
+        $output .= "<p>Job Type: " . htmlspecialchars($job['job_type']) . "</p>";
+        $output .= "</div>";
+        $output .= "<button class='bg-[rgb(34,197,94)] text-white py-2 px-4 rounded job-details hover:bg-green-600' 
+                    onclick=\"window.location.href='job-details.php?job_id=" . $job['job_id'] . "'\">
+                    Job Details
+                    </button>";
                 $output .= "</div>";
             }
         } else {

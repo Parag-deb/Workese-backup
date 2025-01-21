@@ -22,8 +22,8 @@
                 <option value="financial-services">Financial Services</option>
                 <option value="transport">Transport</option>
             </select>
-            <button id="search-job" class="bg-[rgb(34,197,94)] text-white px-6 py-2 rounded hover:bg-green-600" onclick="window.location.href='jobs.php'">
-                Search Job
+            <button id="search-job" class="bg-[rgb(34,197,94)] text-white px-6 py-2 rounded hover:bg-green-600" onclick="window.location.href='worker-list.php'">
+                Search Workers
             </button>
             
             
@@ -290,8 +290,8 @@
             <h2 class="text-2xl font-bold">Good Life Begins With A Good Company</h2>
             <p class="text-gray-600 mt-4">Ultrices purus dolor viverra mi scelerisque at mauris justo. Ultrices purus diam egestas amet faucibus tempor blandit. Elit vitae mi mauris aliquam et diam. Leo sagittis consectetur diam mi morbi et aenean. Vulputate praesent congue faucibus in euismod feugiat euismod volutpat...</p>
             <div class="mt-8 flex space-x-4">
-                <button class="bg-[rgb(34,197,94)] text-white px-6 py-2 rounded hover:bg-green-600" onclick="window.location.href='jobs.php'">
-                    Search Job
+                <button class="bg-[rgb(34,197,94)] text-white px-6 py-2 rounded hover:bg-green-600" onclick="window.location.href='worker-list.php'">
+                    Search Workers
                 </button>
                 
                 <button class="bg-gray-200 text-gray-700 px-6 py-2 rounded hover:bg-gray-300" onclick="window.location.href='../about-us.php'">

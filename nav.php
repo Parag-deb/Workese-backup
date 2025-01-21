@@ -14,16 +14,53 @@ require 'connect.php';
 </head>
 <body>
 <header class="bg-black text-white p-4 flex justify-between items-center">
+        <!-- Hamburger Menu Icon -->
+        <div class="md:hidden">
+        <button id="menu-toggle" class="text-white focus:outline-none">
+            <i class="fas fa-bars"></i>
+            <nav class="hidden md:flex space-x-4">
+        <a class="hover:text-gray-400" href="/home/index.html">Home</a>
+        <?php if (isset($_SESSION['role'])): ?>
+            <?php if ($_SESSION['role'] === 'worker'): ?>
+                <a class="hover:text-gray-400" href="jobs.php">Jobs</a>
+            <?php elseif ($_SESSION['role'] === 'recruiter'): ?>
+                <a class="hover:text-gray-400" href="worker-list.php">Workers</a>
+            <?php endif; ?>
+        <?php endif; ?>
+        <a class="hover:text-gray-400" href="../about-us.php">About Us</a>
+        <a class="hover:text-gray-400" href="../contact-us.php">Contact Us</a>
+    </nav>
+
+        </button>
+    </div>
     <!-- Logo Section -->
     <div class="flex items-center">
         <i class="fas fa-briefcase mr-2"></i>
         <span class="text-xl font-bold">WORKEASE</span>
     </div>
 
+
+
     <!-- Navigation Menu -->
     <nav class="hidden md:flex space-x-4">
-        <a class="hover:text-gray-400" href="/home/index.html">Home</a>
-        <a class="hover:text-gray-400" href="jobs.php">Jobs</a>
+    <?php 
+    // Determine the home link based on user role
+    if (isset($_SESSION['role'])): 
+        if ($_SESSION['role'] === 'worker'): ?>
+            <a class="hover:text-gray-400" href="home-worker.php">Home</a>
+        <?php elseif ($_SESSION['role'] === 'recruiter'): ?>
+            <a class="hover:text-gray-400" href="home-recruiter.php">Home</a>
+        <?php endif; 
+    else: ?>
+        <a class="hover:text-gray-400" href="index.php">Home</a>
+    <?php endif; ?>
+        <?php if (isset($_SESSION['role'])): ?>
+            <?php if ($_SESSION['role'] === 'worker'): ?>
+                <a class="hover:text-gray-400" href="jobs.php">Jobs</a>
+            <?php elseif ($_SESSION['role'] === 'recruiter'): ?>
+                <a class="hover:text-gray-400" href="worker-list.php">Workers</a>
+            <?php endif; ?>
+        <?php endif; ?>
         <a class="hover:text-gray-400" href="../about-us.php">About Us</a>
         <a class="hover:text-gray-400" href="../contact-us.php">Contact Us</a>
     </nav>
@@ -155,6 +192,11 @@ require 'connect.php';
     function closeJobDetailsModal() {
         document.getElementById('jobDetailsModal').classList.add('hidden');
     }
+
+    document.getElementById('menu-toggle').addEventListener('click', function() {
+        var navMenu = document.getElementById('nav-menu');
+        navMenu.classList.toggle('hidden'); // Toggle the visibility of the nav menu
+    });
 </script>
 </body>
 </html>
