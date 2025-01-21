@@ -1,38 +1,59 @@
 <?php
-include "connect.php";
+require 'connect.php';
+session_start();
 
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+if (isset($_POST['action']) && $_POST['action'] == 'fetchData') {
+    $jobTitle = isset($_POST['job_title']) ? $conn->real_escape_string($_POST['job_title']) : '';
+    $location = isset($_POST['location']) ? $conn->real_escape_string($_POST['location']) : '';
+    $categories = isset($_POST['categories']) ? $_POST['categories'] : [];
+    $jobTypes = isset($_POST['job_types']) ? $_POST['job_types'] : [];
+    $experiences = isset($_POST['experiences']) ? $_POST['experiences'] : [];
 
-if (isset($_POST['action'])) {
-    $output = '';
-    if ($_POST['action'] == 'fetchData') {
-        $query = "SELECT * FROM workers JOIN users ON workers.user_id = users.id";
-        $output = getData($query);
-        echo $output; // Echo the output here
+    // Build the SQL query based on filters
+    $sql = "SELECT * FROM workers 
+                        JOIN
+                        users
+                        ON
+                        workers.user_id = users.id
+                        WHERE 1=1 ";             // Start with a base query
+
+    if (!empty($jobTitle)) {
+        $sql .= " AND job_title LIKE '%$jobTitle%'"; // Filter by job title
     }
-}
+    if (!empty($location)) {
+        $sql .= " AND users.district = '$location'"; // Filter by location
+    }
+    if (!empty($categories)) {
+        $categoryList = "'" . implode("','", array_map($conn->real_escape_string, $categories)) . "'";
+        $sql .= " AND category IN ($categoryList)"; // Filter by categories
+    }
+    if (!empty($jobTypes)) {
+        $jobTypeList = "'" . implode("','", array_map($conn->real_escape_string, $jobTypes)) . "'";
+        $sql .= " AND job_type IN ($jobTypeList)"; // Filter by job types
+    }
+    if (!empty($experiences)) {
+        $experienceList = "'" . implode("','", array_map($conn->real_escape_string, $experiences)) . "'";
+        $sql .= " AND experience IN ($experienceList)"; // Filter by experience levels
+    }
 
-function getData($query) {
-    include("connect.php");
-    $output = "";
-    $total_row = mysqli_query($conn, $query) or die(mysqli_error($conn));
+    // Execute the query
+    $result = $conn->query($sql);
 
-    if (mysqli_num_rows($total_row) > 0) {
-        foreach ($total_row as $row) {
-            $output .= '
-            <div class="bg-white p-4 rounded-lg shadow-md flex flex-col items-center">
-                
-                <h2 class="text-lg font-bold">' . htmlspecialchars($row['name']) . '</h2>
-                <p class="text-gray-600">' . htmlspecialchars($row['experience']) . '</p>
-                <p class="text-gray-600">Experience: ' . htmlspecialchars($row['skills']) . '</p>
-                <button class="mt-4 bg-[rgb(34,197,94)] text-white py-2 px-4 rounded hover:bg-green-600">Send Request</button>
-            </div>';
+    if ($result->num_rows > 0) {
+        while ($worker = $result->fetch_assoc()) {
+            // Output worker details as needed
+            echo "<div class='worker-card bg-white p-4 rounded shadow-md'>";
+            echo "<h3 class='font-bold'>" . htmlspecialchars($worker['name']) . "</h3>";
+            //echo "<p>Location: " . htmlspecialchars($worker['location']) . "</p>";
+            //echo "<p>Job Title: " . htmlspecialchars($worker['job_title']) . "</p>";
+            //echo "<p>Category: " . htmlspecialchars($worker['category']) . "</p>";
+            //echo "<p>Job Type: " . htmlspecialchars($worker['job_type']) . "</p>";
+            echo "<p>Experience: " . htmlspecialchars($worker['experience']) . "</p>";
+            echo "</div>";
         }
     } else {
-        $output .= '<p>No workers found.</p>';
+        echo "No workers found.";
     }
-    return $output;
 }
+$conn->close();
 ?>
