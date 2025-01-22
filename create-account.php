@@ -1,5 +1,6 @@
 <?php 
 include 'connect.php';
+include 'nav.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if required fields are set
@@ -77,36 +78,13 @@ $conn->close();
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
 </head>
 <body class="font-roboto">
-<header class="bg-black text-white">
-    <div class="container mx-auto flex justify-between items-center py-4 px-6">
-        <div class="flex items-center">
-            <img alt="Logo" class="mr-2" height="30" src="https://storage.googleapis.com/a1aa/image/E7INiQyIjO4fSicCYTqEpeAs0KSSXxpD0JWRytVGIjzegqEoA.jpg" width="30"/>
-            <span class="font-bold">WORKESE</span>
-        </div>
-        <nav class="hidden md:flex space-x-4">
-            <div class="hidden md:flex space-x-4">
-                <a class="hover:text-gray-400" href="/home/index.html">Home</a>
-                <a class="hover:text-gray-400" href="/jobs/index.html">Jobs</a>
-                <a class="hover:text-gray-400" href="/about us/index.html">About Us</a>
-                <a class="hover:text-gray-400" href="/contact us/index.html">Contact Us</a>
-            </div>
-        </nav>
-        <div class="space-x-4">
-            <!-- Register Button -->
-            <button class="bg-green-500 py-1 px-4 rounded hover:bg-green-600">Register</button>
 
-            <!-- Login Button -->
-            <button class="bg-green-700 py-1 px-4 rounded hover:bg-green-500">Login</button>
-</div>
 
-    </div>
-</header>
-
-<main class="bg-cover bg-center" style="background-image: url('https://placehold.co/1920x400');">
+<main class="bg-cover bg-center" style="background-image: url('images/bg.jpeg')">
     <div class="container mx-auto text-center py-20 px-4">
         <h1 class="text-4xl font-bold text-white">Create Your Account</h1>
         <p class="text-xl text-white mt-4">Already create an account?</p>
-        <button class="mt-4 bg-green-500 text-white py-2 px-6 rounded hover:bg-green-600">Sign In</button>
+        <button class="mt-4 bg-green-500 text-white py-2 px-6 rounded hover:bg-green-600" onclick="window.location.href='login.php'">Sign In</button>
     </div>
 </main>
 <section class="container mx-auto py-10 px-4 md:px-6">

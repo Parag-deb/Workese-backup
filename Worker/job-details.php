@@ -2,6 +2,7 @@
 include "../connect.php";
 session_start();
 include '../nav.php';
+include '../fetch-notification.php';
 
 //Get the job_id from the query string
 if (isset($_GET['job_id'])) {

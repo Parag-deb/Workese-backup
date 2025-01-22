@@ -1,8 +1,8 @@
 <?php 
 ob_start(); // Start output buffering
-require 'connect.php';
+require '../connect.php';
 session_start();
-include 'nav.php'; // Include your navigation bar
+include '../nav.php'; // Include your navigation bar
 
 // Initialize jobLocation variable
 $jobLocation = ''; // Default value

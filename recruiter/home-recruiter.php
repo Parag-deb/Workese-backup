@@ -1,6 +1,7 @@
 <?php
     require '../connect.php';
     session_start();
+    include '../fetch-notification.php';
     include '../nav.php';
 ?>
 
@@ -374,9 +375,9 @@
         }
     });
 
-    document.getElementById('search-job').addEventListener('click', function() {
-        window.location.href = '/jobs/index.html';
-    });
+    // document.getElementById('search-job').addEventListener('click', function() {
+    //     window.location.href = '/jobs/index.html';
+    // });
 
     function subscribeNewsletter() {
         // Add your subscription logic here

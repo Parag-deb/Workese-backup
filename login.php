@@ -125,8 +125,8 @@ $conn->close();
       <a class="hover:text-gray-400" href="contact-us.php">Contact Us</a>
     </div>
     <div class="flex space-x-4">
-      <a class="hover:text-gray-400" href="/log in/index.html">Login</a>
-      <a class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" href="/create account/index.html">Register</a>
+      <a class="hover:text-gray-400" href="login.php">Login</a>
+      <a class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" href="create-account.php">Register</a>
     </div>
   </nav>
 

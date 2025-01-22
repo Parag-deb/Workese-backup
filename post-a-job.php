@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $workerResult = $conn->query($workerSql);
 
         while ($worker = $workerResult->fetch_assoc()) {
-            $notificationMessage = "A new job has been posted in your location: $job_title.";
+            $notificationMessage = "A new job has been posted in your location by: $company_name.";
             $notificationSql = "INSERT INTO notifications (worker_id, message, job_id) VALUES (?, ?, ?)";
             $notificationStmt = $conn->prepare($notificationSql);
             $notificationStmt->bind_param("isi", $worker['worker_id'], $notificationMessage, $jobId);
@@ -61,6 +61,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
+
+//     if ($conn->query($sql) === TRUE) {
+//         $jobId = $conn->insert_id; // Get the ID of the newly inserted job
+
+//         // Fetch workers who match the job category and location
+//         //$workerSql = "SELECT id, email FROM workers WHERE location = ? AND category = ?";
+//         $workerSql = "SELECT worker_id , job_id FROM workers JOIN users ON workers.user_id = users.id WHERE users.district = '$location'AND users.role='worker'";
+//         $workerStmt = $conn->prepare($workerSql);
+//         $workerStmt->bind_param("ss", $location, $category);
+//         $workerStmt->execute();
+//         $workerResult = $workerStmt->get_result();
+
+//         // Insert notifications for each matching worker
+//         while ($worker = $workerResult->fetch_assoc()) {
+//             $workerId = $worker['id'];
+//             $message = "A new job has been posted: " . htmlspecialchars($jobTitle) . " at " . htmlspecialchars($companyName);
+//             $notificationSql = "INSERT INTO notifications (worker_id, message, job_id, is_read) VALUES (?, ?, ?, FALSE)";
+//             $notificationStmt = $conn->prepare($notificationSql);
+//             $notificationStmt->bind_param("isi", $workerId, $message, $jobId);
+//             $notificationStmt->execute();
+//             $notificationStmt->close();
+//         }
+
+//         echo "Job posted successfully and notifications sent!";
+//     } else {
+//         echo "Error posting job: " . $stmt->error;
+    
+// }
 }
 
 // Close the connection

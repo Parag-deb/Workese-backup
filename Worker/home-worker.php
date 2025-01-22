@@ -1,7 +1,11 @@
 <?php
-    require '../connect.php';
-    session_start();
+//ob_start(); // Start output buffering
+require '../connect.php';
+session_start();
+    
     include '../nav.php';
+    require '../fetch-notification.php';
+
 ?>
 
 <section class="bg-cover bg-center text-center py-20" style="background-image: url('../Images/bg.jpeg')">
@@ -22,9 +26,9 @@
                 <option value="financial-services">Financial Services</option>
                 <option value="transport">Transport</option>
             </select>
-            <button id="search-job" class="bg-[rgb(34,197,94)] text-white px-6 py-2 rounded hover:bg-green-600" onclick="window.location.href='jobs.php'">
-                Search Job
-            </button>
+            <button type="button" id="search-job" class="bg-[rgb(34,197,94)] text-white px-6 py-2 rounded hover:bg-green-600" onclick="window.location.href='jobs.php'">
+    Search Job
+</button>
             
             
         </div>
@@ -374,14 +378,17 @@
         }
     });
 
-    document.getElementById('search-job').addEventListener('click', function() {
-        window.location.href = '/jobs/index.html';
-    });
+    // document.getElementById('search-job').addEventListener('click', function() {
+    //     window.location.href = '/jobs/index.html';
+    // });
 
     function subscribeNewsletter() {
         // Add your subscription logic here
         alert('Thank you for subscribing to our newsletter!');
     }
+        // Print the session variable to the console
+        var userId = <?php echo json_encode($_SESSION['job_location']); ?>; // Pass the session variable to JavaScript
+    console.log("User  ID from session: ", userId);
 </script>
 </body>
 </html>

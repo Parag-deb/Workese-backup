@@ -42,12 +42,77 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 '$salary_range'
             )";
 
-    if ($conn->query($sql) === TRUE) {
-        echo "<script>alert('Job posted successfully!'); window.location.href='post-a-job.php';</script>";
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+
+if ($conn->query($sql) === TRUE) {
+    // Notify workers in the same location
+    $jobId = $conn->insert_id; // Get the last inserted job ID
+    $_SESSION['job_location']= $location;
+    $workerSql = "SELECT worker_id FROM workers JOIN users ON workers.user_id = users.id WHERE users.district = '$location'AND users.role='worker'";
+    $workerResult = $conn->query($workerSql);
+
+    while ($worker = $workerResult->fetch_assoc()) {
+        $notificationMessage = "A new job has been posted in your location: $job_title.";
+        $notificationSql = "INSERT INTO notifications (worker_id, message, job_id) VALUES (?, ?, ?)";
+        $notificationStmt = $conn->prepare($notificationSql);
+        $notificationStmt->bind_param("isi", $worker['worker_id'], $notificationMessage, $jobId);
+        $notificationStmt->execute();
     }
+
+    echo "<script>alert('Job posted successfully!'); window.location.href='post-a-job.php';</script>";
+} else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
 }
+
+if ($conn->query($sql) === TRUE) {
+    $jobId = $conn->insert_id; // Get the last inserted job ID
+
+    // Fetch workers who match the job location
+    $workerSql = "SELECT workers.worker_id, users.email FROM workers 
+                  JOIN users ON workers.user_id = users.id 
+                  WHERE users.district = ? AND users.role='worker'";
+    $workerStmt = $conn->prepare($workerSql);
+    $workerStmt->bind_param("s", $location);
+    $workerStmt->execute();
+    $workerResult = $workerStmt->get_result();
+
+    // Prepare email notification
+    $subject = "New Job Posted: " . htmlspecialchars($job_title);
+    $message = "A new job has been posted: " . htmlspecialchars($job_title) . " at " . htmlspecialchars($company_name) . ".\n\n" .
+               "Job Description: " . htmlspecialchars($job_description) . "\n" .
+               "Location: " . htmlspecialchars($location) . "\n" .
+               "Salary Range: " . htmlspecialchars($salary_range) . "\n" .
+               "Application Deadline: " . htmlspecialchars($application_deadline) . "\n\n" .
+               "Visit the job portal for more details.";
+
+    // Insert notifications for each matching worker and send email
+    while ($worker = $workerResult->fetch_assoc()) {
+        $workerId = $worker['worker_id'];
+        $workerEmail = $worker['email'];
+
+        // Insert notification into the database
+        $notificationSql = "INSERT INTO notifications (worker_id, message, job_id, is_read) VALUES (?, ?, ?, FALSE)";
+        $notificationStmt = $conn->prepare($notificationSql);
+        $notificationStmt->bind_param("isi", $workerId, $message, $jobId);
+        $notificationStmt->execute();
+
+        // Send email notification
+        if (mail($workerEmail, $subject, $message, "From: no-reply@yourdomain.com")) {
+            // Email sent successfully
+        } else {
+            echo "Failed to send email to: " . htmlspecialchars($workerEmail);
+        }
+    }
+
+    echo "<script>alert('Job posted successfully and notifications sent!'); window.location.href='post-a-job.php';</script>";
+} else {
+    echo "Error posting job: " . $conn->error;
+}
+
+// Close the statements
+$workerStmt->close();
+$conn->close();
+}
+
 
 
 // Close the connection
@@ -57,7 +122,7 @@ $conn->close();
     <body class="bg-gray-100 font-roboto">
     <main class="flex flex-col items-center mt-10 px-4" method="POST">
         <h1 class="text-4xl font-bold mb-4">Create A Job</h1>
-        <p class="mb-6">Already create an account? <a href="#" class="bg-teal-500 text-white px-4 py-2 rounded">Sign in</a></p>
+        <!-- <p class="mb-6">Already create an account? <a href="#" class="bg-teal-500 text-white px-4 py-2 rounded">Sign in</a></p> -->
         <form action="post-a-job.php" method="POST" class="bg-white p-8 rounded shadow-md w-full">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
@@ -231,7 +296,7 @@ $conn->close();
             <div class="space-x-4">
                 <a class="hover:text-gray-400" href="#">Privacy Policy</a>
                 <a class="hover:text-gray-400" href="#">Terms &amp; Conditions</a>
-            </div>
+            </div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
         </div>
     </footer>
     <script>

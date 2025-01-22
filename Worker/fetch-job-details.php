@@ -1,5 +1,5 @@
 <?php
-require 'connect.php'; // Include your database connection
+require '../connect.php'; // Include your database connection
 session_start(); // Start the session
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['job_id'])) {
