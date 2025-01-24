@@ -2,7 +2,7 @@
 require '../connect.php';
 session_start();
 include '../nav.php'; 
-include '../fetch-notification.php';
+//include '../fetch-notification.php';
 
 // Check if the application was successful
 if (isset($_SESSION['application_success'])) {

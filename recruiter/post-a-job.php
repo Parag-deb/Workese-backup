@@ -16,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $application_deadline = $conn->real_escape_string($_POST['application_deadline']);
     $qualification = $conn->real_escape_string($_POST['qualification']);
     $job_description = $conn->real_escape_string($_POST['job_description']);
+    $user_id = $_SESSION['id'];
 
     // Insert data into the jobs table
     $sql = "INSERT INTO jobs (
@@ -28,7 +29,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 description, 
                 qualification, 
                 application_deadline, 
-                salary_range
+                salary_range,
+                user_id
             ) VALUES (
                 '$job_title', 
                 '$company_name', 
@@ -39,7 +41,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 '$job_description', 
                 '$qualification', 
                 '$application_deadline', 
-                '$salary_range'
+                '$salary_range',
+                $user_id
             )";
 
 

@@ -4,19 +4,25 @@ require '../connect.php';
 include '../nav.php';
 
 // Fetch user details (example based on session email)
-if (isset($_SESSION['email'])) {
-    $email = $_SESSION['email'];
-    $query = "SELECT * FROM users WHERE email = '$email'";
-    $result = $conn->query($query);
+if (isset($_SESSION['id'])) {
+    $email = $_SESSION['id'];
+    $query = "SELECT users.*, workers.language_preferences AS language, workers.skills 
+              FROM users 
+              JOIN workers ON users.id = workers.user_id 
+              WHERE users.id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result && $result->num_rows > 0) {
         $user = $result->fetch_assoc();
     } else {
-        echo "User not found.";
+        echo "User  not found.";
         exit;
     }
 } else {
-    echo "User not logged in.";
+    echo "User  not logged in.";
     exit;
 }
 ?>
@@ -33,59 +39,59 @@ if (isset($_SESSION['email'])) {
         <div class="flex items-center space-x-4">
             <img alt="Profile picture of user" class="w-16 h-16 rounded-full" src="https://via.placeholder.com/100" />
             <div>
-                <h2 class="text-xl font-bold"><?php echo $user['name']; ?></h2>
-                <p class="text-gray-500"><?php echo $user['email']; ?></p>
+                <h2 class="text-xl font-bold"><?php echo htmlspecialchars($user['name'] ?? ''); ?></h2>
+                <p class="text-gray-500"><?php echo htmlspecialchars($user['email'] ?? ''); ?></p>
             </div>
             <div class="absolute top-4 right-4 flex space-x-2">
+                <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400" onclick="window.location.href='edit-profile.php'">Edit</button>
                 <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400">Post a Job</button>
-                <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400">Edit</button>
             </div>
         </div>
         <form class="mt-8 space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-gray-700">Full Name</label>
-                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo $user['name']; ?>" type="text" readonly />
+                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo htmlspecialchars($user['name'] ?? ''); ?>" type="text" readonly />
                 </div>
                 <div>
                     <label class="block text-gray-700">Date of Birth</label>
-                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo $user['date_of_birth']; ?>" type="date" readonly />
+                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo htmlspecialchars($user['date_of_birth'] ?? ''); ?>" type="date" readonly />
                 </div>
                 <div>
                     <label class="block text-gray-700">Email</label>
-                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo $user['email']; ?>" type="email" readonly />
+                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" type="email" readonly />
                 </div>
                 <div>
                     <label class="block text-gray-700">Mobile Number</label>
-                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo $user['phone']; ?>" type="text" readonly />
-                </div>
+                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo htmlspecialchars($user['phone'] ?? ''); ?>" type="text" readonly />
+ </div>
                 <div>
                     <label class="block text-gray-700">Country</label>
                     <input class="w-full p-2 border border-gray-300 rounded" value="Bangladesh" type="text" readonly />
                 </div>
                 <div>
                     <label class="block text-gray-700">Division</label>
-                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo $user['division']; ?>" type="text" readonly />
+                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo htmlspecialchars($user['division'] ?? ''); ?>" type="text" readonly />
                 </div>
                 <div>
                     <label class="block text-gray-700">District</label>
-                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo $user['district']; ?>" type="text" readonly />
+                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo htmlspecialchars($user['district'] ?? ''); ?>" type="text" readonly />
                 </div>
                 <div>
                     <label class="block text-gray-700">Language</label>
-                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo $user['language']; ?>" type="text" readonly />
+                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo htmlspecialchars($user['language'] ?? ''); ?>" type="text" readonly />
                 </div>
                 <div>
                     <label class="block text-gray-700">Experience</label>
-                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo $user['experience']; ?>" type="text" readonly />
+                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo htmlspecialchars($user['experience'] ?? ''); ?>" type="text" readonly />
                 </div>
                 <div>
                     <label class="block text-gray-700">Salary</label>
-                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo $user['salary']; ?>" type="text" readonly />
+                    <input class="w-full p-2 border border-gray-300 rounded" value="<?php echo htmlspecialchars($user['salary'] ?? ''); ?>" type="text" readonly />
                 </div>
             </div>
         </form>
     </div>
-    <?php include 'footer.php'; ?>
+    <?php include '../footer.php'; ?>
 </body>
 </html>

@@ -48,21 +48,84 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "INSERT INTO users (name, email, date_of_birth, phone, gender, password,  description, division, district, upazila, address, education_title, education_degree, education_institute, education_year, facebook, instagram, linkedin, whatsapp_number, expertise_title, expertise_level, role) 
             VALUES ('$name', '$email', '$date_of_birth', '$phone', '$gender', '$password',  '$description', '$division', '$district', '$upazila', '$address', '$education_title', '$education_degree', '$education_institute', '$education_year', '$facebook', '$instagram', '$linkedin', '$whatsapp_number', '$expertise_title', '$expertise_level', '$role')";
 
+
+
+// if ($conn->query($sql) === TRUE) {
+//     // Registration successful, redirect to login page with a success message
+//     echo "<script>
+//         alert('Registration successful!');
+//         window.location.href = '/login.php';
+//     </script>";
+//     // Alternatively, you can use a PHP header for redirection
+//     header("Location: login.php");
+//     exit(); // Ensure the script stops executing after redirection
+// } else {
+//     // Registration failed
+//     $error = "Error: " . $sql . "<br>" . $conn->error;
+// }
+// }
+
 if ($conn->query($sql) === TRUE) {
+    // Check if the role is 'worker'
+    if ($role === 'worker') {
+        // Get the last inserted user ID
+        $lastUserId = $conn->insert_id; // This gets the ID of the last inserted row
+
+        // Insert into the workers table
+        $workerSql = "INSERT INTO workers (user_id) VALUES (?)";
+        $workerStmt = $conn->prepare($workerSql);
+        
+        if (!$workerStmt) {
+            echo "Error preparing statement: " . $conn->error;
+            exit;
+        }
+
+        $workerStmt->bind_param("i", $lastUserId); // Bind the user ID
+
+        if (!$workerStmt->execute()) {
+            echo "Error executing statement: " . $workerStmt->error;
+            exit;
+        }
+
+        $workerStmt->close(); // Close the statement
+    }
+    if ($role === 'recruiter') {
+        // Get the last inserted user ID
+        $lastUserId = $conn->insert_id; // This gets the ID of the last inserted row
+
+        // Insert into the workers table
+        $recruiterSql = "INSERT INTO recruiters (user_id) VALUES (?)";
+        $recruiterStmt = $conn->prepare($recruiterSql);
+        
+        if (!$recruiterStmt) {
+            echo "Error preparing statement: " . $conn->error;
+            exit;
+        }
+
+        $recruiterStmt->bind_param("i", $lastUserId); // Bind the user ID
+
+        if (!$recruiterStmt->execute()) {
+            echo "Error executing statement: " . $recruiterStmt->error;
+            exit;
+        }
+
+        $recruiterStmt->close(); // Close the statement
+    }
+
+
     // Registration successful, redirect to login page with a success message
     echo "<script>
         alert('Registration successful!');
         window.location.href = '/login.php';
     </script>";
-    // Alternatively, you can use a PHP header for redirection
     header("Location: login.php");
     exit(); // Ensure the script stops executing after redirection
 } else {
     // Registration failed
     $error = "Error: " . $sql . "<br>" . $conn->error;
 }
-}
 
+}
 
 // Close the connection
 $conn->close();

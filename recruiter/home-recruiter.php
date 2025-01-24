@@ -1,8 +1,9 @@
 <?php
     require '../connect.php';
     session_start();
-    include '../fetch-notification.php';
+    
     include '../nav.php';
+   // include 'fetch-notification.php';
 ?>
 
 <section class="bg-cover bg-center text-center py-20" style="background-image: url('../Images/bg.jpeg')">

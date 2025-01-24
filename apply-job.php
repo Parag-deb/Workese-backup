@@ -4,37 +4,60 @@ require 'connect.php';
 session_start();
 include 'nav.php'; // Include your navigation bar
 
+// Console log function
+function console_log($message) {
+    $output = json_encode($message); // Encode the message for JavaScript
+    echo "<script>console.log($output);</script>";
+}
+
 // Initialize jobLocation variable
 $jobLocation = ''; // Default value
+console_log("Script started.");
 
 // Fetch user profile data
 $userId = $_SESSION['id']; // Assuming user ID is stored in session
+console_log("User ID: " . $userId);
+
 $userQuery = "SELECT * FROM users WHERE id = ?";
 $userStmt = $conn->prepare($userQuery);
 $userStmt->bind_param("i", $userId);
 $userStmt->execute();
 $userResult = $userStmt->get_result();
 $userData = $userResult->fetch_assoc();
+console_log("User data: " . json_encode($userData));
 
-// Fetch job location based on job ID (assuming job_id is stored in the session)
+// Fetch job location and recruiter ID based on job ID
 if (isset($_SESSION['job_id'])) {
-    $job_id = $_SESSION['job_id']; // Get the job ID from the session
+    $job_id = $_SESSION['job_id'];
+    console_log("Job ID from session: " . $job_id);
 
-    // Fetch the job details from the database
-    $query = "SELECT * FROM jobs WHERE job_id = ?";
+    $query = "SELECT jobs.*, users.id AS recruiter_id FROM jobs JOIN users ON jobs.user_id = users.id WHERE job_id = ?";
+    console_log("Executing query: " . $query);
+
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $job_id); // Bind the job ID parameter
-    $stmt->execute();
-    $result = $stmt->get_result();
+    $stmt->bind_param("i", $job_id);
 
-    if ($result && mysqli_num_rows($result) > 0) {
-        $job = mysqli_fetch_assoc($result); // Fetch job details
-        $jobLocation = $job['location']; // Get the job location
+    if ($stmt->execute()) {
+        console_log("Job query executed successfully.");
+        $result = $stmt->get_result();
+
+        if ($result && mysqli_num_rows($result) > 0) {
+            $job = mysqli_fetch_assoc($result);
+            console_log("Job details: " . json_encode($job));
+
+            $jobLocation = $job['location'];
+            $recruiterId = $job['recruiter_id'];
+        } else {
+            console_log("Job not found for job ID: " . $job_id);
+            echo "Job not found!";
+            exit;
+        }
     } else {
-        echo "Job not found!";
-        exit;
+        console_log("Error executing job query: " . $stmt->error);
     }
+    $stmt->close();
 } else {
+    console_log("No job ID provided in session.");
     echo "No job ID provided!";
     exit;
 }
@@ -45,51 +68,71 @@ ini_set('display_errors', 1);
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Check if session variables are set
+    console_log("Form submitted.");
+
     if (!isset($_SESSION['id']) || !isset($_SESSION['job_id'])) {
+        console_log("Session variables are not set.");
         echo "Session variables are not set.";
         exit;
     }
 
-    // Get the user ID and job ID from the session
     $workerId = $_SESSION['id']; // Assuming this is the worker's ID
     $jobId = $_SESSION['job_id'];
 
-    // Get the expected salary, cover letter, and location from the form
     $expectedSalary = $_POST['expected_salary'];
     $coverLetter = $_POST['cover_letter'];
     $location = $_POST['location']; // Assuming you have a location field in your form
 
-    // Prepare the SQL statement to insert the application
+    console_log("Expected Salary: " . $expectedSalary);
+    console_log("Cover Letter: " . $coverLetter);
+    console_log("Location: " . $location);
+
     $query = "INSERT INTO jobapplications (job_id, worker_id, expected_salary, cover_letter, location) VALUES (?, ?, ?, ?, ?)";
+    console_log("Executing job application query: " . $query);
+
     $stmt = $conn->prepare($query);
 
-    // Check if the statement was prepared successfully
     if (!$stmt) {
-        echo "Error preparing statement: " . $conn->error;
+        console_log("Error preparing job application statement: " . $conn->error);
         exit;
     }
 
-    // Bind parameters
     $stmt->bind_param("iisss", $jobId, $workerId, $expectedSalary, $coverLetter, $location);
 
-    // Execute the statement
     if ($stmt->execute()) {
-        // Set a session variable to indicate success
+        console_log("Job application inserted successfully.");
         $_SESSION['application_success'] = true;
-        // Redirect to jobs.php
-        //<script> alert ("Application submitted successfully!") </script>;
-        //echo '<script>alert("Application submitted successfully!");</script>';
-        header("Location: Worker\jobs.php");
+
+        $notificationMessage = "A new application has been submitted for your job: " . htmlspecialchars($job['job_title']) . ". Expected Salary: " . htmlspecialchars($expectedSalary);
+        console_log("Notification message: " . $notificationMessage);
+
+        $notificationQuery = "INSERT INTO notificationsJobs (worker_id, message, job_id) VALUES (?, ?, ?)";
+        $notificationStmt = $conn->prepare($notificationQuery);
+
+        if (!$notificationStmt) {
+            console_log("Error preparing notification statement: " . $conn->error);
+            exit;
+        }
+
+        $notificationStmt->bind_param("isi", $recruiterId, $notificationMessage, $jobId);
+
+        if ($notificationStmt->execute()) {
+            console_log("Notification inserted successfully.");
+        } else {
+            console_log("Error executing notification statement: " . $notificationStmt->error);
+        }
+
+        $notificationStmt->close();
+
+        echo '<script>alert("Application submitted successfully!");</script>';
+        header("Location: Worker/jobs.php");
         exit;
     } else {
-        echo "Error executing statement: " . $stmt->error;
+        console_log("Error executing job application statement: " . $stmt->error);
     }
 
-    // Close the statement
     $stmt->close();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -108,7 +151,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
-    <!-- Main Content -->
     <main class="flex-grow container mx-auto py-12 px-6">
         <div class="border p-8 w-full">
             <form class="grid grid-cols-1 md:grid-cols-2 gap-6" method="POST" action="">
@@ -130,40 +172,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <div>
                     <label for="address" class="block mb-2">Division :</label>
-                    <input type="text" id="address" class="w-full border p-2" value="<?php echo htmlspecialchars($userData['address']); ?>" readonly>
+                    <input type="text" id="address" class="w-full border p-2" value="<?php echo htmlspecialchars($userData['division']); ?>" readonly>
                 </div>
                 <div>
-                    <label for="gender" class="block mb-2">Gender :</label>
-                    <input type="text" id="gender" name="gender" class="w-full border p-2" value="<?php echo htmlspecialchars($userData['gender']); ?>" readonly>
-                </div>
-                <div>
- <label for="location" class="block mb-2">Location :</label>
-                    <input type="text" id="location" name="location" class="w-full border p-2" value="<?php echo htmlspecialchars($jobLocation); ?>" required>
-                </div>
-                <div>
-                    <label for="salary" class="block mb-2">Expected Salary :</label>
-                    <input type="text" id="salary" name="expected_salary" class="w-full border p-2" required>
+                    <label for="expected_salary" class="block mb-2">Expected Salary :</label>
+                    <input type="text" id="expected_salary" name="expected_salary" class="w-full border p-2" required>
                 </div>
                 <div>
                     <label for="cover_letter" class="block mb-2">Cover Letter :</label>
                     <textarea id="cover_letter" name="cover_letter" class="w-full border p-2" rows="4" required></textarea>
                 </div>
-
-                <div class="col-span-1 md:col-span-2 flex justify-center">
-                    <button type="submit" class="bg-teal-500 text-white px-6 py-2 rounded hover:bg-teal-600">SUBMIT</button>
+                <div>
+                    <label for="location" class="block mb-2">Location :</label>
+                    <input type="text" id="location" name="location" class="w-full border p-2" value="<?php echo htmlspecialchars($jobLocation); ?>" readonly>
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Submit Application</button>
                 </div>
             </form>
         </div>
     </main>
-
-    <!-- Footer -->
-    <?php include 'footer.php'; ?>
-
-    <script>
-        document.getElementById('menu-toggle').addEventListener('click', function() {
-            var menu = document.getElementById('nav-menu');
-            menu.classList.toggle('hidden');
-        });
-    </script>
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto text-center">
+            <p>&copy; <?php echo date("Y"); ?> Job Portal. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>
