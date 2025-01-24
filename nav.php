@@ -69,7 +69,11 @@ if (isset($_SESSION['id']) && isset($_SESSION['role'])) {
     <nav class="hidden md:flex space-x-4">
         <?php if (isset($_SESSION['role'])): ?>
             <a class="hover:text-gray-400" href="<?php echo $_SESSION['role'] === 'worker' ? 'home-worker.php' : 'home-recruiter.php'; ?>">Home</a>
-            <a class="hover:text-gray-400" href="<?php echo $_SESSION['role'] === 'worker' ? 'jobs.php' : 'worker-list.php'; ?>">Jobs</a>
+            <?php if ($_SESSION['role'] === 'worker'): ?>
+                <a class="hover:text-gray-400" href="jobs.php">Jobs</a>
+            <?php elseif ($_SESSION['role'] === 'recruiter'): ?>
+                <a class="hover:text-gray-400" href="worker-list.php">Workers</a>
+            <?php endif; ?>
         <?php else: ?>
             <a class="hover:text-gray-400" href="index.php">Home</a>
         <?php endif; ?>

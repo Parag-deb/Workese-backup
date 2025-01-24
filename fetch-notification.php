@@ -1,5 +1,5 @@
 <?php
-//session_start(); // Start the session
+session_start(); // Start the session
 require 'connect.php'; // Database connection
 
 // Use user ID and role from POST or fallback to session
@@ -48,12 +48,25 @@ if ($userId && $userRole) {
 
     if ($notifications->num_rows > 0) {
         while ($notification = $notifications->fetch_assoc()) {
-            echo '<a href="job-details.php?job_id=' . htmlspecialchars($notification['job_id']) . '" class="p-2 border rounded hover:bg-gray-100 block">
-                    ' . htmlspecialchars($notification['message']) . ' (Job: ' . htmlspecialchars($notification['job_title']) .')  (CREATED AT: ' . htmlspecialchars($notification['created_at']) . ') 
-                  </a>';
+            // Debugging: Print the full notification to verify the 'source' key
+            echo '<pre>';
+            print_r($notification); 
+            echo '</pre>';
+        
+            if (isset($notification['source']) && in_array($notification['source'], ['notificationsJobs', 'negotiation'])) {
+                // Link to job-action.php with 3 buttons
+                echo '<a href="job-action.php?job_id=' . htmlspecialchars($notification['job_id']) . '&source=' . htmlspecialchars($notification['source']) . '" target="_blank" class="p-2 border rounded hover:bg-gray-100 block">
+                        ' . htmlspecialchars($notification['message']) . ' (Job: ' . htmlspecialchars($notification['job_title']) . ') (Created At: ' . htmlspecialchars($notification['created_at']) . ')
+                      </a>';
+            } else {
+                // Link to job-details.php for general notifications
+                echo '<a href="job-details.php?job_id=' . htmlspecialchars($notification['job_id']) . '" class="p-2 border rounded hover:bg-gray-100 block">
+                        ' . htmlspecialchars($notification['message']) . ' (Job: ' . htmlspecialchars($notification['job_title']) . ') (Created At: ' . htmlspecialchars($notification['created_at']) . ')
+                      </a>';
+            }
         }
-    } else {
-        echo '<div class="text-gray-500">No new notifications.</div>';
+        
+        
     }
 
     $notificationStmt->close();
