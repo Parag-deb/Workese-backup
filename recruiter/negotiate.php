@@ -70,4 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo "<div class='text-red-500'>Invalid request method.</div>";
 }
+
+// worker profile e notification pathanu complete , ekhn oi notificationtay click korle ki dkhabe oita fix korbo
 ?>
