@@ -12,6 +12,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Retrieve the logged-in user's ID
     $userId = isset($_SESSION['id']) ? intval($_SESSION['id']) : null;
 
+    echo "<script>
+    console.log('Job ID: " . json_encode($jobId) . "');
+    console.log('Worker ID: " . json_encode($workerId) . "'); // Log worker ID
+    console.log('Expected Salary: " . json_encode($expectedSalary) . "');
+    console.log('Negotiation Input: " . json_encode($negotiationInput) . "');
+    console.log('User  ID: " . json_encode($userId) . "');
+</script>";
+
+
     // Validate all inputs
     if (!$jobId || !$workerId || !$expectedSalary || !$negotiationInput || !$userId) {
         echo "<div class='text-red-500'>Invalid input. Please ensure all fields are filled correctly.</div>";
@@ -19,16 +28,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Log each variable to the browser console for debugging
         echo "<script>
             console.log('Job ID: " . json_encode($jobId) . "');
-            console.log('Worker ID: " . json_encode($workerId) . "');
+            console.log('Worker ID: " . json_encode($workerId) . "'); // Log worker ID
             console.log('Expected Salary: " . json_encode($expectedSalary) . "');
             console.log('Negotiation Input: " . json_encode($negotiationInput) . "');
-            console.log('User ID: " . json_encode($userId) . "');
+            console.log('User  ID: " . json_encode($userId) . "');
         </script>";
     
         exit;
     }
+
+    // Check if the worker ID exists in the workers table
+    $checkWorkerSql = "SELECT worker_id FROM workers WHERE worker_id = ?";
+    $checkWorkerStmt = $conn->prepare($checkWorkerSql);
+    $checkWorkerStmt->bind_param("i", $workerId);
+    $checkWorkerStmt->execute();
+    $checkWorkerResult = $checkWorkerStmt->get_result();
+
+    if ($checkWorkerResult->num_rows === 0) {
+        echo "<div class='text-red-500'>Error: Worker ID does not exist.</div>";
+        exit;
+    }
+
     // Calculate total negotiated amount
-    $negotiatedAmount =  $negotiationInput;
+    $negotiatedAmount = $negotiationInput;
 
     // Log details
     error_log("Job ID: $jobId, Worker ID: $workerId, User ID: $userId, Negotiated Amount: $negotiatedAmount");
@@ -45,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Create a notification
             $notificationMessage = "You have a new negotiation for Job ID: $jobId from User ID: $userId. Negotiated Amount: $negotiatedAmount";
-            $notificationSql = "INSERT INTO notifications (worker_id, message, job_id, is_read) VALUES (?, ?, ?, ?)";
+            $notificationSql = "INSERT INTO notifications (worker_id, message, job_id, is_read , source) VALUES (?, ?, ?, ? , 'negotiation')";
             $notificationStmt = $conn->prepare($notificationSql);
 
             if ($notificationStmt) {
@@ -70,6 +92,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo "<div class='text-red-500'>Invalid request method.</div>";
 }
-
-// worker profile e notification pathanu complete , ekhn oi notificationtay click korle ki dkhabe oita fix korbo
 ?>

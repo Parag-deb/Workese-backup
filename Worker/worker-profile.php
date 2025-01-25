@@ -44,7 +44,8 @@ if (isset($_SESSION['id'])) {
             </div>
             <div class="absolute top-4 right-4 flex space-x-2">
                 <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400" onclick="window.location.href='edit-profile.php'">Edit</button>
-                <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400">Post a Job</button>
+                <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400" onclick="window.location.href='my-jobs.php'">My Jobs</button>
+
             </div>
         </div>
         <form class="mt-8 space-y-4">

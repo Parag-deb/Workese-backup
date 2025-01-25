@@ -1,3 +1,6 @@
+<!-- job -  confirmation -->
+
+<!-- here starts the recruiter negotiation -->
 <?php
 session_start();
 require '../connect.php'; // Database connection
@@ -25,13 +28,98 @@ if (!$jobId) {
     exit;
 }
 
+if ($action === 'accept') {
+    // Logic for "accept" action
+    $updateSql = "UPDATE negotiations SET status = 'accepted' WHERE job_id = ? AND worker_id = ?";
+    $stmt = $conn->prepare($updateSql);
+    if ($stmt) {
+        $stmt->bind_param("ii", $jobId, $workerId);
+        if ($stmt->execute()) {
+            $workerSql = "SELECT users.name, negotiations.negotiated_amount 
+                          FROM users 
+                          JOIN negotiations ON users.id = negotiations.worker_id 
+                          WHERE negotiations.job_id = ? AND negotiations.worker_id = ?";
+            $workerStmt = $conn->prepare($workerSql);
+            if ($workerStmt) {
+                $workerStmt->bind_param("ii", $jobId, $workerId);
+                $workerStmt->execute();
+                $result = $workerStmt->get_result();
+                $worker = $result->fetch_assoc();
+
+                $workerName = $worker['name'];
+                $negotiatedPrice = $worker['negotiated_amount'];
+
+                $notificationSql = "INSERT INTO notifications (user_id, message) VALUES (?, ?)";
+                $notificationStmt = $conn->prepare($notificationSql);
+                if ($notificationStmt) {
+                    $message = "You have been signed for the job at a price of $negotiatedPrice.";
+                    $notificationStmt->bind_param("is", $workerId, $message);
+                    $notificationStmt->execute();
+                }
+
+                echo "<script>
+                    alert('You signed $workerName at price $negotiatedPrice.');
+                    window.location.href = 'job-action.php?job_id=$jobId&source=negotiate';
+                </script>";
+                exit;
+            }
+        } else {
+            echo "Error updating negotiation status: " . $stmt->error;
+        }
+    } else {
+        echo "Error preparing statement: " . $conn->error;
+    }
+} elseif ($action === 'decline') {
+    // Logic for "decline" action
+    $updateSql = "UPDATE negotiations SET status = 'declined' WHERE job_id = ? AND worker_id = ?";
+    $stmt = $conn->prepare($updateSql);
+    if ($stmt) {
+        $stmt->bind_param("ii", $jobId, $workerId);
+        if ($stmt->execute()) {
+            $workerSql = "SELECT users.name FROM users WHERE id = ?";
+            $workerStmt = $conn->prepare($workerSql);
+            if ($workerStmt) {
+                $workerStmt->bind_param("i", $workerId);
+                $workerStmt->execute();
+                $result = $workerStmt->get_result();
+                $worker = $result->fetch_assoc();
+
+                $workerName = $worker['name'];
+
+                $notificationSql = "INSERT INTO notifications (user_id, message) VALUES (?, ?)";
+                $notificationStmt = $conn->prepare($notificationSql);
+                if ($notificationStmt) {
+                    $message = "Your application for the job has been declined.";
+                    $notificationStmt->bind_param("is", $workerId, $message);
+                    $notificationStmt->execute();
+                }
+
+                echo "<script>
+                    alert('You declined $workerName for the job.');
+                    window.location.href = 'job-action.php?job_id=$jobId&source=negotiate';
+                </script>";
+                exit;
+            }
+        } else {
+            echo "Error updating negotiation status: " . $stmt->error;
+        }
+    } else {
+        echo "Error preparing statement: " . $conn->error;
+    }
+}
+
+
 // Fetch worker details for the specific job
-$workerDetailsSql = "SELECT * FROM jobapplications 
-                     JOIN 
-                     users ON jobapplications.worker_id = users.id
-                     JOIN
-                     workers ON users.id = workers.user_id
-                     WHERE jobapplications.job_id = ?";
+$workerDetailsSql = "SELECT * 
+                        FROM jobapplications 
+                        JOIN users ON jobapplications.worker_id = users.id 
+                        JOIN workers ON users.id = workers.user_id 
+                        JOIN notificationsjobs ON jobapplications.job_id = notificationsjobs.job_id 
+                        JOIN negotiations ON notificationsjobs.job_id = negotiations.job_id 
+                        WHERE jobapplications.job_id = ?
+                        ORDER BY negotiations.created_at DESC 
+                        LIMIT 1
+                        ";
 console_log("SQL Query: " . $workerDetailsSql);
 
 $workerStmt = $conn->prepare($workerDetailsSql);
@@ -58,9 +146,47 @@ if ($workerDetails->num_rows > 0) {
     $worker = $workerDetails->fetch_assoc();
     console_log("Worker details fetched: " . json_encode($worker));
 } else {
-    console_log("No worker details found for this job.");
+    // console_log("No worker details found for this job.");
+    // echo '<div class="text-red-500">No worker details found for this job.</div>';
+    // exit;
+    $workerDetailsSql = "SELECT jobapplications.*, users.*,workers.*,
+    notificationsjobs.job_id
+                        FROM jobapplications 
+                        JOIN users ON jobapplications.worker_id = users.id 
+                        JOIN workers ON users.id = workers.user_id 
+                        JOIN notificationsjobs ON jobapplications.job_id = notificationsjobs.job_id 
+                        WHERE jobapplications.job_id = ?;
+                        ";
+
+console_log("SQL Query: " . $workerDetailsSql);
+
+$workerStmt = $conn->prepare($workerDetailsSql);
+
+if (!$workerStmt) {
+    console_log("Error preparing statement: " . $conn->error);
+    echo "Error preparing statement: " . htmlspecialchars($conn->error);
+    exit;
+}
+
+$workerStmt->bind_param("i", $jobId);
+console_log("Bind param: job_id = " . $jobId);
+
+if (!$workerStmt->execute()) {
+    console_log("Error executing statement: " . $workerStmt->error);
+    echo "Error executing statement: " . htmlspecialchars($workerStmt->error);
+    exit;
+}
+
+$workerDetails = $workerStmt->get_result();
+console_log("SQL executed successfully. Number of rows: " . $workerDetails->num_rows);
+
+if ($workerDetails->num_rows > 0) {
+    $worker = $workerDetails->fetch_assoc();
+    console_log("Worker details fetched: " . json_encode($worker));
+}else {
     echo '<div class="text-red-500">No worker details found for this job.</div>';
     exit;
+}
 }
 
 $workerStmt->close();
@@ -87,12 +213,13 @@ $workerStmt->close();
             <p><strong>Experience:</strong> <?php echo htmlspecialchars($worker['experience']); ?> years</p>
             <p><strong>Skills:</strong> <?php echo htmlspecialchars($worker['skills']); ?></p>
             <p><strong>Expected Salary:</strong> <?php echo htmlspecialchars($worker['expected_salary']); ?></p>
+            <p><strong>Negotiated Salary:</strong> <?php echo htmlspecialchars($worker['negotiated_amount']); ?></p>
         </div>
 
         <!-- Action Buttons -->
         <div class="mt-6 flex justify-between">
-            <!-- Accept Button -->
-            <form action="handle-action.php" method="POST" class="inline-block">
+             <!-- Accept Button -->
+             <form action="job-action.php" method="POST" class="inline-block">
                 <input type="hidden" name="job_id" value="<?php echo htmlspecialchars($jobId); ?>">
                 <input type="hidden" name="worker_id" value="<?php echo htmlspecialchars($worker['worker_id']); ?>">
                 <input type="hidden" name="action" value="accept">
@@ -100,7 +227,7 @@ $workerStmt->close();
             </form>
 
             <!-- Decline Button -->
-            <form action="handle-action.php" method="POST" class="inline-block">
+            <form action="job-action.php" method="POST" class="inline-block">
                 <input type="hidden" name="job_id" value="<?php echo htmlspecialchars($jobId); ?>">
                 <input type="hidden" name="worker_id" value="<?php echo htmlspecialchars($worker['worker_id']); ?>">
                 <input type="hidden" name="action" value="decline">
