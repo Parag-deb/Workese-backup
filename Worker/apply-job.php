@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $notificationMessage = "A new application has been submitted for your job: " . htmlspecialchars($job['title']) . ". Expected Salary: " . htmlspecialchars($expectedSalary);
         console_log("Notification message: " . $notificationMessage);
 
-        $notificationQuery = "INSERT INTO notifications (worker_id, message, job_id, is_read, created_at) VALUES (36, 'hi', 24, 0, ?)";
+        $notificationQuery = "INSERT INTO notifications (worker_id, message, job_id, is_read, created_at) VALUES (?, ?, ?, ?, ?)";
         $notificationStmt = $conn->prepare($notificationQuery);
 
         if (!$notificationStmt) {

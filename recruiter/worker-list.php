@@ -19,34 +19,77 @@ include '../nav.php';
         <div class="flex flex-col lg:flex-row">
             <!-- Sidebar -->
             <div class="w-full lg:w-1/4 bg-white p-4 rounded-lg shadow-md">
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="job-title">Search by Job Title</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="job-title" placeholder="Job title or company" type="text"/>
-                </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="worker-name">Search by Worker Name</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="worker-name" placeholder="Enter worker name" type="text" />
+            </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Location</label>
                     <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="location">
                         <option value="">Choose city</option>
                         <option value="Bagerhat">Bagerhat</option>
-                        <option value="Bandarban">Bandarban</option>
-                        <option value="Barguna">Barguna</option>
-                        <option value="Barishal">Barishal</option>
-                        <option value="Bhola">Bhola</option>
-                        <option value="Bogura">Bogura</option>
-                        <option value="Brahmanbaria">Brahmanbaria</option>
-                        <option value="Chandpur">Chandpur</option>
-                        <option value="Chattogram">Chattogram</option>
-                        <option value="Cox's Bazar">Cox's Bazar</option>
-                        <option value="Cumilla">Cumilla</option>
-                        <option value="Dhaka">Dhaka</option>
-                        <option value="Dinajpur">Dinajpur</option>
-                        <option value="Feni">Feni</option>
-                        <option value="Gazipur">Gazipur</option>
-                        <option value="Khulna">Khulna</option>
-                        <option value="Mymensingh">Mymensingh</option>
-                        <option value="Rajshahi">Rajshahi</option>
-                        <option value="Sylhet">Sylhet</option>
-                        <option value="Patuakhali">Patuakhali</option>
+                    <option value="Bandarban">Bandarban</option>
+                    <option value="Barguna">Barguna</option>
+                    <option value="Barisal">Barisal</option>
+                    <option value="Bhola">Bhola</option>
+                    <option value="Bogra">Bogra</option>
+                    <option value="Brahmanbaria">Brahmanbaria</option>
+                    <option value="Chandpur">Chandpur</option>
+                    <option value="Chattogram">Chattogram</option>
+                    <option value="Chuadanga">Chuadanga</option>
+                    <option value="Cox's Bazar">Cox's Bazar</option>
+                    <option value="Cumilla">Cumilla</option>
+                    <option value="Dhaka">Dhaka</option>
+                    <option value="Dinajpur">Dinajpur</option>
+                    <option value="Faridpur">Faridpur</option>
+                    <option value="Feni">Feni</option>
+                    <option value="Gaibandha">Gaibandha</option>
+                    <option value="Gazipur">Gazipur</option>
+                    <option value="Gopalganj">Gopalganj</option>
+                    <option value="Habiganj">Habiganj</option>
+                    <option value="Jamalpur">Jamalpur</option>
+                    <option value="Jashore">Jashore</option>
+                    <option value="Jhalokati">Jhalokati</option>
+                    <option value="Jhenaidah">Jhenaidah</option>
+                    <option value="Joypurhat">Joypurhat</option>
+                    <option value="Khagrachari">Khagrachari</option>
+                    <option value="Khulna">Khulna</option>
+                    <option value="Kishoreganj">Kishoreganj</option>
+                    <option value="Kurigram">Kurigram</option>
+                    <option value="Kushtia">Kushtia</option>
+                    <option value="Lakshmipur">Lakshmipur</option>
+                    <option value="Lalmonirhat">Lalmonirhat</option>
+                    <option value="Madaripur">Madaripur</option>
+                    <option value="Magura">Magura</option>
+                    <option value="Manikganj">Manikganj</option>
+                    <option value="Meherpur">Meherpur</option>
+                    <option value="Moulvibazar">Moulvibazar</option>
+                    <option value="Munshiganj">Munshiganj</option>
+                    <option value="Mymensingh">Mymensingh</option>
+                    <option value="Naogaon">Naogaon</option>
+                    <option value="Narail">Narail</option>
+                    <option value="Narayanganj">Narayanganj</option>
+                    <option value="Narsingdi">Narsingdi</option>
+                    <option value="Natore">Natore</option>
+                    <option value="Netrokona">Netrokona</option>
+                    <option value="Nilphamari">Nilphamari</option>
+                    <option value="Noakhali">Noakhali</option>
+                    <option value="Pabna">Pabna</option>
+                    <option value="Panchagarh">Panchagarh</option>
+                    <option value="Patuakhali">Patuakhali</option>
+                    <option value="Pirojpur">Pirojpur</option>
+                    <option value="Rajbari">Rajbari</option>
+                    <option value="Rajshahi">Rajshahi</option>
+                    <option value="Rangamati">Rangamati</option>
+                    <option value="Rangpur">Rangpur</option>
+                    <option value="Satkhira">Satkhira</option>
+                    <option value="Shariatpur">Shariatpur</option>
+                    <option value="Sherpur">Sherpur</option>
+                    <option value="Sirajganj">Sirajganj</option>
+                    <option value="Sunamganj">Sunamganj</option>
+                    <option value="Sylhet">Sylhet</option>
+                    <option value="Tangail">Tangail</option>
+                    <option value="Thakurgaon">Thakurgaon</option>
 
                     </select>
                 </div>
@@ -77,7 +120,7 @@ include '../nav.php';
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Job Type</label>
-                    <div class="flex flex -col">
+                    <div class="flex flex-col">
                         <label class="inline-flex items-center">
                             <input class="form-checkbox text-indigo-600" type="checkbox" name="job_type[]" value="Full Time"/>
                             <span class="ml-2">Full Time</span>
@@ -148,39 +191,40 @@ include '../nav.php';
         });
 
         function fetchData() {
-            var action = 'fetchData';
-            var jobTitle = $('#job-title').val(); // Get job title
-            var location = $('#location').val(); // Get location
-            var categories = $('input[name="category[]"]:checked').map(function() {
-                return $(this).val();
-            }).get(); // Get selected categories
-            var jobTypes = $('input[name="job_type[]"]:checked').map(function() {
-                return $(this).val();
-            }).get(); // Get selected job types
-            var experiences = $('input[name="experience[]"]:checked').map(function() {
-                return $(this).val();
-            }).get(); // Get selected experience levels
+                var action = 'fetchData';
+                var workerName = $('#worker-name').val(); // Get worker name
+                var location = $('#location').val(); // Get location
+                var categories = $('input[name="category[]"]:checked').map(function() {
+                    return $(this).val();
+                }).get(); // Get selected categories
+                var jobTypes = $('input[name="job_type[]"]:checked').map(function() {
+                    return $(this).val();
+                }).get(); // Get selected job types
+                var experiences = $('input[name="experience[]"]:checked').map(function() {
+                    return $(this).val();
+                }).get(); // Get selected experience levels
 
-            $.ajax({
-                url: "worker-action.php",
-                method: "POST",
-                data: { 
-                    action: action,
-                    job_title: jobTitle,
-                    location: location,
-                    categories: categories,
-                    job_types: jobTypes,
-                    experiences: experiences
-                },
-                success: function(data) {
-                    console.log(data); // Log the response data
-                    $('#worker-list ').html(data);
-                },
-                error: function(xhr, status, error) {
-                    console.error("AJAX Error: ", status, error);
-                }
-            });
-        }
+                $.ajax({
+                    url: "worker-action.php",
+                    method: "POST",
+                    data: { 
+                        action: action,
+                        worker_name: workerName,
+                        location: location,
+                        categories: categories,
+                        job_types: jobTypes,
+                        experiences: experiences
+                    },
+                    success: function(data) {
+                        console.log(data); // Log the response data
+                        $('#worker-list').html(data);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("AJAX Error: ", status, error);
+                    }
+                });
+            }
+
     </script>
 </body>
 </html>

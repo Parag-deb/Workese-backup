@@ -8,11 +8,23 @@ if (isset($_SESSION['id'])) {
     $workerId = $_SESSION['id'];
 
     // Fetch jobs accepted by the worker
-    $query = "SELECT jobs.job_title, jobs.description, jobs.salary_range, negotiations.status, jobs.created_at
-			  FROM jobs
-              JOIN negotiations
-              ON jobs.job_id = negotiations.job_id
-              WHERE negotiations.worker_id = ? AND negotiations.status = 'accepted';";
+    $query = "SELECT 
+                    jobs.job_title, 
+                    jobs.description, 
+                    jobs.salary_range, 
+                    MAX(negotiations.status) AS status, 
+                    jobs.created_at 
+                FROM 
+                    jobs 
+                JOIN 
+                    negotiations 
+                ON 
+                    jobs.job_id = negotiations.job_id 
+                WHERE 
+                    negotiations.user_id = ?
+                    AND negotiations.status = 'accepted'
+                GROUP BY 
+                    jobs.job_title, jobs.description, jobs.salary_range, jobs.created_at";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $workerId);
     $stmt->execute();
@@ -37,11 +49,11 @@ if (isset($_SESSION['id'])) {
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <?php while ($job = $result->fetch_assoc()): ?>
                     <div class="border rounded p-4 shadow-sm">
-                        <h2 class="text-lg font-bold"><?php echo htmlspecialchars($job['title']); ?></h2>
+                        <h2 class="text-lg font-bold"><?php echo htmlspecialchars($job['job_title']); ?></h2>
                         <p class="text-gray-600"><?php echo htmlspecialchars($job['description']); ?></p>
-                        <p class="text-gray-500 mt-2">Salary: <?php echo htmlspecialchars($job['salary']); ?></p>
+                        <p class="text-gray-500 mt-2">Salary: <?php echo htmlspecialchars($job['salary_range']); ?></p>
                         <p class="text-gray-500">Status: <?php echo htmlspecialchars($job['status']); ?></p>
-                        <p class="text-gray-400 text-sm mt-2">Posted on: <?php echo htmlspecialchars($job['posted_on']); ?></p>
+                        <p class="text-gray-400 text-sm mt-2">Posted on: <?php echo htmlspecialchars($job['created_at']); ?></p>
                     </div>
                 <?php endwhile; ?>
             </div>
