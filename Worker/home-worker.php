@@ -327,7 +327,7 @@ session_start();
         </div>
     </div>
 </section>
-<?php include "../footer.php;" ?>
+<?php include "../footer.php" ;?>
   
 <script>
     document.getElementById('menu-toggle').addEventListener('click', function() {

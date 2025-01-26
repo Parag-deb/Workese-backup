@@ -79,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo "<div class='text-red-500'>Error executing notification query: " . htmlspecialchars($notificationStmt->error) . "</div>";
                 }
                 $notificationStmt->close();
+                header("Location: home-recruiter.php");
             } else {
                 echo "<div class='text-red-500'>Error preparing notification query: " . htmlspecialchars($conn->error) . "</div>";
             }

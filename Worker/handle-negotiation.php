@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userId = isset($_SESSION['id']) ? intval($_SESSION['id']) : null;
 
     // Validate inputs
-    if (!$jobId || !$workerId || !$expectedSalary || $negotiationInput <= 0 || !$userId || !$action) {
+    if (!$jobId || !$workerId || !$expectedSalary ||  !$userId || !$action) {
         echo "<div class='text-red-500'>Invalid input. Please ensure all fields are filled correctly.</div>";
         exit;
     }
@@ -79,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo "<div class='text-red-500'>No negotiation details found.</div>";
                 }
                 $detailsStmt->close();
+                header("Location: home-worker.php");
             } else {
                 echo "<div class='text-red-500'>Error preparing details query: " . htmlspecialchars($conn->error) . "</div>";
             }
@@ -138,6 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo "<div class='text-red-500'>No job details found for the declined action.</div>";
                     }
                     $declineStmt->close();
+                    header("Location: home-worker.php");
                 } else {
                     echo "<div class='text-red-500'>Error preparing decline details query: " . htmlspecialchars($conn->error) . "</div>";
                 }
@@ -180,6 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             echo "<div class='text-red-500'>Error preparing notification query: " . htmlspecialchars($conn->error) . "</div>";
                         }
                         $jobPosterStmt->close();
+                        header("Location: home-worker.php");
                     } else {
                         echo "<div class='text-red-500'>Error submitting negotiation: " . htmlspecialchars($stmt->error) . "</div>";
                     }

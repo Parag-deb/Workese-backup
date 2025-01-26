@@ -16,7 +16,7 @@ console_log("Starting Job Action script");
 // Fetch job ID and source from the URL
 $jobId = isset($_GET['job_id']) ? intval($_GET['job_id']) : null;
 $source = isset($_GET['source']) ? $_GET['source'] : null;
-
+$action = isset($_POST['action']) ? $_POST['action'] : null;
 // Log the job ID and source
 console_log("Job ID: " . ($jobId !== null ? $jobId : "null"));
 console_log("Source: " . ($source !== null ? $source : "null"));
@@ -28,13 +28,17 @@ if (!$jobId) {
     exit;
 }
 
+// Get worker ID from POST data
+$workerId = isset($_POST['worker_id']) ? intval($_POST['worker_id']) : null;
+
 if ($action === 'accept') {
-    // Logic for "accept" action
+    // Update negotiation status to "accepted"
     $updateSql = "UPDATE negotiations SET status = 'accepted' WHERE job_id = ? AND worker_id = ?";
     $stmt = $conn->prepare($updateSql);
     if ($stmt) {
         $stmt->bind_param("ii", $jobId, $workerId);
         if ($stmt->execute()) {
+            // Fetch worker details and negotiated amount
             $workerSql = "SELECT users.name, negotiations.negotiated_amount 
                           FROM users 
                           JOIN negotiations ON users.id = negotiations.worker_id 
@@ -46,22 +50,26 @@ if ($action === 'accept') {
                 $result = $workerStmt->get_result();
                 $worker = $result->fetch_assoc();
 
-                $workerName = $worker['name'];
-                $negotiatedPrice = $worker['negotiated_amount'];
+                if ($worker) {
+                    $workerName = $worker['name'];
+                    $negotiatedPrice = $worker['negotiated_amount'];
 
-                $notificationSql = "INSERT INTO notifications (user_id, message) VALUES (?, ?)";
-                $notificationStmt = $conn->prepare($notificationSql);
-                if ($notificationStmt) {
-                    $message = "You have been signed for the job at a price of $negotiatedPrice.";
-                    $notificationStmt->bind_param("is", $workerId, $message);
-                    $notificationStmt->execute();
+                    // Insert notification for accepted job
+                    $notificationSql = "INSERT INTO notifications (worker_id, message, job_id, is_read, created_at, source) 
+                                        VALUES (?, ?, ?, 0, NOW(), 'negotiation')";
+                    $notificationStmt = $conn->prepare($notificationSql);
+                    if ($notificationStmt) {
+                        $message = "You have been signed for the job at a price of $negotiatedPrice.";
+                        $notificationStmt->bind_param("isi", $workerId, $message, $jobId);
+                        $notificationStmt->execute();
+                    }
+
+                    echo "<script>
+                        alert('You signed $workerName at price $negotiatedPrice.');
+                        window.location.href = 'home-recruiter.php?job_id=$jobId&source=negotiate';
+                    </script>";
+                    exit;
                 }
-
-                echo "<script>
-                    alert('You signed $workerName at price $negotiatedPrice.');
-                    window.location.href = 'job-action.php?job_id=$jobId&source=negotiate';
-                </script>";
-                exit;
             }
         } else {
             echo "Error updating negotiation status: " . $stmt->error;
@@ -70,12 +78,13 @@ if ($action === 'accept') {
         echo "Error preparing statement: " . $conn->error;
     }
 } elseif ($action === 'decline') {
-    // Logic for "decline" action
+    // Update negotiation status to "declined"
     $updateSql = "UPDATE negotiations SET status = 'declined' WHERE job_id = ? AND worker_id = ?";
     $stmt = $conn->prepare($updateSql);
     if ($stmt) {
         $stmt->bind_param("ii", $jobId, $workerId);
         if ($stmt->execute()) {
+            // Fetch worker details
             $workerSql = "SELECT users.name FROM users WHERE id = ?";
             $workerStmt = $conn->prepare($workerSql);
             if ($workerStmt) {
@@ -84,21 +93,25 @@ if ($action === 'accept') {
                 $result = $workerStmt->get_result();
                 $worker = $result->fetch_assoc();
 
-                $workerName = $worker['name'];
+                if ($worker) {
+                    $workerName = $worker['name'];
 
-                $notificationSql = "INSERT INTO notifications (user_id, message) VALUES (?, ?)";
-                $notificationStmt = $conn->prepare($notificationSql);
-                if ($notificationStmt) {
-                    $message = "Your application for the job has been declined.";
-                    $notificationStmt->bind_param("is", $workerId, $message);
-                    $notificationStmt->execute();
+                    // Insert notification for declined job
+                    $notificationSql = "INSERT INTO notifications (worker_id, message, job_id, is_read, created_at, source) 
+                                        VALUES (?, ?, ?, 0, NOW(), 'negotiate')";
+                    $notificationStmt = $conn->prepare($notificationSql);
+                    if ($notificationStmt) {
+                        $message = "Your application for the job has been declined.";
+                        $notificationStmt->bind_param("isi", $workerId, $message, $jobId);
+                        $notificationStmt->execute();
+                    }
+
+                    echo "<script>
+                        alert('You declined $workerName for the job.');
+                        window.location.href = 'home-recruiter.php?job_id=$jobId&source=negotiate';
+                    </script>";
+                    exit;
                 }
-
-                echo "<script>
-                    alert('You declined $workerName for the job.');
-                    window.location.href = 'job-action.php?job_id=$jobId&source=negotiate';
-                </script>";
-                exit;
             }
         } else {
             echo "Error updating negotiation status: " . $stmt->error;
@@ -108,6 +121,7 @@ if ($action === 'accept') {
     }
 }
 
+else{
 
 // Fetch worker details for the specific job
 $workerDetailsSql = "SELECT * 
@@ -188,6 +202,7 @@ if ($workerDetails->num_rows > 0) {
     exit;
 }
 }
+}
 
 $workerStmt->close();
 ?>
@@ -213,26 +228,35 @@ $workerStmt->close();
             <p><strong>Experience:</strong> <?php echo htmlspecialchars($worker['experience']); ?> years</p>
             <p><strong>Skills:</strong> <?php echo htmlspecialchars($worker['skills']); ?></p>
             <p><strong>Expected Salary:</strong> <?php echo htmlspecialchars($worker['expected_salary']); ?></p>
-            <p><strong>Negotiated Salary:</strong> <?php echo htmlspecialchars($worker['negotiated_amount']); ?></p>
+            <p>
+        <strong>Negotiated Salary:</strong>
+        <?php
+        if (!empty($worker['negotiated_amount'])) {
+            echo htmlspecialchars($worker['negotiated_amount']);
+        } else {
+            echo "Negotiation not started yet.";
+        }
+        ?>
+    </p>
         </div>
 
         <!-- Action Buttons -->
         <div class="mt-6 flex justify-between">
              <!-- Accept Button -->
-             <form action="job-action.php" method="POST" class="inline-block">
-                <input type="hidden" name="job_id" value="<?php echo htmlspecialchars($jobId); ?>">
-                <input type="hidden" name="worker_id" value="<?php echo htmlspecialchars($worker['worker_id']); ?>">
-                <input type="hidden" name="action" value="accept">
-                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Accept</button>
-            </form>
+             <form  method="POST" class="inline-block">
+    <input type="hidden" name="job_id" value="<?php echo htmlspecialchars($jobId); ?>">
+    <input type="hidden" name="worker_id" value="<?php echo htmlspecialchars($worker['worker_id']); ?>">
+    <input type="hidden" name="action" value="accept">
+    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Accept</button>
+</form>
 
-            <!-- Decline Button -->
-            <form action="job-action.php" method="POST" class="inline-block">
-                <input type="hidden" name="job_id" value="<?php echo htmlspecialchars($jobId); ?>">
-                <input type="hidden" name="worker_id" value="<?php echo htmlspecialchars($worker['worker_id']); ?>">
-                <input type="hidden" name="action" value="decline">
-                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Decline</button>
-            </form>
+<!-- Decline Button -->
+<form  method="POST" class="inline-block">
+    <input type="hidden" name="job_id" value="<?php echo htmlspecialchars($jobId); ?>">
+    <input type="hidden" name="worker_id" value="<?php echo htmlspecialchars($worker['worker_id']); ?>">
+    <input type="hidden" name="action" value="decline">
+    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Decline</button>
+</form>
 
             <!-- Negotiate Button -->
 

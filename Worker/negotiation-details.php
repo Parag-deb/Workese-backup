@@ -62,7 +62,7 @@ if ($jobId) {
                         <!-- Decline Button -->
                         <button type="submit" name="action" value="decline" class="bg-red-500 text-white py-2 px-4 rounded">Decline</button>
                         <!-- Negotiation Input -->
-                        <input type="number" name="price" placeholder="Negotiation Price" class="border p-2 rounded" required>
+                        <input type="number" name="price" placeholder="Negotiation Price" class="border p-2 rounded">
                         <!-- Negotiate Button -->
                         <button type="submit" name="action" value="negotiate" class="bg-blue-500 text-white py-2 px-4 rounded">Negotiate</button>
                     </div>
