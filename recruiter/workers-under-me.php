@@ -14,12 +14,12 @@ $employerId = intval($_SESSION['id']); // Employer's user ID from session
 // Fetch workers assigned to this employer
 $query = "SELECT 
             jobs.job_id,
-            users.id AS employer_id, 
-            users.name, 
-            users.email, 
-            users.phone, 
-            users.division, 
-            users.district, 
+            users.id AS worker_id, 
+            users.name AS worker_name, 
+            users.email AS worker_email, 
+            users.phone AS worker_phone, 
+            users.division AS worker_division, 
+            users.district AS worker_district, 
             jobs.job_title, 
             jobs.created_at, 
             jobapplications.worker_id, 
@@ -43,6 +43,39 @@ if ($result->num_rows === 0) {
     echo "<p class='text-center text-gray-500'>No workers are assigned to you.</p>";
     exit;
 }
+
+// Handle rating submission
+if (isset($_POST['submit_rating'])) {
+    $workerId = $_POST['worker_id']; // The worker's ID
+    $ratingValue = intval($_POST['rating']);
+    $review = $_POST['review'];
+
+    // Check if the worker exists in the database
+    $checkWorkerQuery = "SELECT 1 FROM users WHERE id = ?";
+    $checkStmt = $conn->prepare($checkWorkerQuery);
+    $checkStmt->bind_param("i", $workerId);
+    $checkStmt->execute();
+    $checkResult = $checkStmt->get_result();
+
+    if ($checkResult->num_rows > 0) {
+        // Worker exists, proceed with the rating insertion
+        if ($ratingValue >= 1 && $ratingValue <= 5) {
+            $query = "INSERT INTO rating (user_id, worker_id, rating_value, review, rating_date) 
+                      VALUES (?, ?, ?, ?, NOW())";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("iiis", $employerId, $workerId, $ratingValue, $review);
+            if ($stmt->execute()) {
+                echo "<p class='text-center text-green-500'>Rating submitted successfully!</p>";
+            } else {
+                echo "<p class='text-center text-red-500'>Error submitting rating.</p>";
+            }
+        } else {
+            echo "<p class='text-center text-red-500'>Invalid rating. Please provide a rating between 1 and 5.</p>";
+        }
+    } else {
+        echo "<p class='text-center text-red-500'>Invalid worker. Please try again.</p>";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,21 +98,55 @@ if ($result->num_rows === 0) {
                     <th class="border border-gray-300 px-4 py-2">Job Title</th>
                     <th class="border border-gray-300 px-4 py-2">Start Date</th>
                     <th class="border border-gray-300 px-4 py-2">Status</th>
+                    <th class="border border-gray-300 px-4 py-2">Rating</th>
                 </tr>
             </thead>
             <tbody>
                 <?php while ($worker = $result->fetch_assoc()) { ?>
                     <tr>
-                        <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($worker['name']); ?></td>
-                        <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($worker['email']); ?></td>
-                        <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($worker['phone']); ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($worker['worker_name']); ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($worker['worker_email']); ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($worker['worker_phone']); ?></td>
                         <td class="border border-gray-300 px-4 py-2">
-                            <?php echo htmlspecialchars($worker['division'] . ', ' . $worker['district']); ?>
+                            <?php echo htmlspecialchars($worker['worker_division'] . ', ' . $worker['worker_district']); ?>
                         </td>
                         <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($worker['job_title']); ?></td>
                         <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($worker['created_at']); ?></td>
                         <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($worker['status']); ?></td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            <form method="POST" action="">
+                                <input type="hidden" name="worker_id" value="<?php echo $worker['worker_id']; ?>">
+
+                                <div class="flex items-center space-x-2">
+                                    <!-- Rating select -->
+                                    <select name="rating" required class="bg-white border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+
+                                    <!-- Review input -->
+                                    <input type="text" name="review" placeholder="Leave a review" class="border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-64" />
+
+                                    <!-- Submit button -->
+                                    <button type="submit" name="submit_rating" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300">Submit Rating</button>
+                                </div>
+                            </form>
+                        </td>
+
                     </tr>
+
+                    <!-- Log data to the console -->
+                    <script>
+                        console.log('Employer ID: <?php echo $employerId; ?>');
+                        console.log('Worker ID: <?php echo $worker['worker_id']; ?>');
+                        console.log('Worker Name: <?php echo htmlspecialchars($worker['worker_name']); ?>');
+                        console.log('Worker Email: <?php echo htmlspecialchars($worker['worker_email']); ?>');
+                        console.log('Worker Phone: <?php echo htmlspecialchars($worker['worker_phone']); ?>');
+                        console.log('Worker Location: <?php echo htmlspecialchars($worker['worker_division'] . ', ' . $worker['worker_district']); ?>');
+                    </script>
                 <?php } ?>
             </tbody>
         </table>

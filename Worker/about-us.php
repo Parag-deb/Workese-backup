@@ -1,7 +1,7 @@
 <?php
-    require 'connect.php';
+    require '../connect.php';
     session_start();
-    include 'nav.php';
+    include '../nav.php';
 ?>
 <html lang="en">
  <head>

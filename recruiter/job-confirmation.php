@@ -77,7 +77,9 @@ if ($action === 'accept') {
     } else {
         echo "Error preparing statement: " . $conn->error;
     }
-} elseif ($action === 'decline') {
+    $workerStmt->close();
+} 
+elseif ($action === 'decline') {
     // Update negotiation status to "declined"
     $updateSql = "UPDATE negotiations SET status = 'declined' WHERE job_id = ? AND worker_id = ?";
     $stmt = $conn->prepare($updateSql);
@@ -119,9 +121,10 @@ if ($action === 'accept') {
     } else {
         echo "Error preparing statement: " . $conn->error;
     }
+    $workerStmt->close();
 }
 
-else{
+
 
 // Fetch worker details for the specific job
 $workerDetailsSql = "SELECT * 
@@ -201,10 +204,11 @@ if ($workerDetails->num_rows > 0) {
     echo '<div class="text-red-500">No worker details found for this job.</div>';
     exit;
 }
-}
-}
+
+
 
 $workerStmt->close();
+}
 ?>
 
 <!DOCTYPE html>
