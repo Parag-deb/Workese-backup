@@ -93,7 +93,7 @@ include '../nav.php';
 
                     </select>
                 </div>
-                <div class="mb-4">
+                <!-- <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Category</label>
                     <div class="flex flex-col">
                         <label class="inline-flex items-center">
@@ -117,8 +117,8 @@ include '../nav.php';
                             <span class="ml-2">Financial Services</span>
                         </label>
                     </div>
-                </div>
-                <div class="mb-4">
+                </div> -->
+                <!-- <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Job Type</label>
                     <div class="flex flex-col">
                         <label class="inline-flex items-center">
@@ -142,6 +142,17 @@ include '../nav.php';
                             <span class="ml-2">Fixed-Price</span>
                         </label>
                     </div>
+                </div> -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Minimum Rating</label>
+                    <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="rating">
+                        <option value="">Choose Rating</option>
+                        <option value="5">5 Stars</option>
+                        <option value="4">4 Stars & Above</option>
+                        <option value="3">3 Stars & Above</option>
+                        <option value="2">2 Stars & Above</option>
+                        <option value="1">1 Star & Above</option>
+                    </select>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Experience Level</label>
@@ -191,39 +202,42 @@ include '../nav.php';
         });
 
         function fetchData() {
-                var action = 'fetchData';
-                var workerName = $('#worker-name').val(); // Get worker name
-                var location = $('#location').val(); // Get location
-                var categories = $('input[name="category[]"]:checked').map(function() {
-                    return $(this).val();
-                }).get(); // Get selected categories
-                var jobTypes = $('input[name="job_type[]"]:checked').map(function() {
-                    return $(this).val();
-                }).get(); // Get selected job types
-                var experiences = $('input[name="experience[]"]:checked').map(function() {
-                    return $(this).val();
-                }).get(); // Get selected experience levels
+            var action = 'fetchData';
+            var workerName = $('#worker-name').val(); // Get worker name
+            var location = $('#location').val(); // Get location
+            var categories = $('input[name="category[]"]:checked').map(function() {
+                return $(this).val();
+            }).get(); // Get selected categories
+            var jobTypes = $('input[name="job_type[]"]:checked').map(function() {
+                return $(this).val();
+            }).get(); // Get selected job types
+            var experiences = $('input[name="experience[]"]:checked').map(function() {
+                return $(this).val();
+            }).get(); // Get selected experience levels
+            var rating = $('#rating').val(); // Get rating value
 
-                $.ajax({
-                    url: "worker-action.php",
-                    method: "POST",
-                    data: { 
-                        action: action,
-                        worker_name: workerName,
-                        location: location,
-                        categories: categories,
-                        job_types: jobTypes,
-                        experiences: experiences
-                    },
-                    success: function(data) {
-                        console.log(data); // Log the response data
-                        $('#worker-list').html(data);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("AJAX Error: ", status, error);
-                    }
-                });
-            }
+            $.ajax({
+                url: "worker-action.php",
+                method: "POST",
+                data: { 
+                    action: action,
+                    worker_name: workerName,
+                    location: location,
+                    categories: categories,
+                    job_types: jobTypes,
+                    experiences: experiences,
+                    rating: rating // Pass the rating to the backend
+                },
+                success: function(data) {
+                    console.log(data); // Log the response data
+                    $('#worker-list').html(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error: ", status, error);
+                }
+            });
+        }
+
 
     </script>
 </body>

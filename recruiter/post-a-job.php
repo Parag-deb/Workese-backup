@@ -147,7 +147,7 @@ $conn->close();
                     <select id="job-type" name="job_type" class="w-full border border-gray-300 p-2 rounded mt-1" required>
                         <option value="Full Time">Full Time</option>
                         <option value="Part Time">Part Time</option>
-                        <option value="Contract">Contract</option>
+                        <option value="Contract">Day Based</option>
                     </select>
                 </div>
 
@@ -158,7 +158,7 @@ $conn->close();
                     <select id="job-category" name="job_category" class="w-full border border-gray-300 p-2 rounded mt-1" required>
                         <option value="Plumber">Plumber</option>
                         <option value="Driver">Driver</option>
-                        <option value="Full Time">k</option>
+                        <option value="Full Time">Dish Washer</option>
                         <option value="Contract">Contract</option>
                     </select>
                 </div>
