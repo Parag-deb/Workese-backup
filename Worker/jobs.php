@@ -146,8 +146,12 @@ if (isset($_SESSION['application_success'])) {
                         <span class="ml-2">Remote</span>
                     </label>
                     <label class="flex items-center">
-                        <input class="form-checkbox text-indigo-600" type="checkbox" name="job_type[]" value="Seasonal"/>
-                        <span class="ml-2">Seasonal</span>
+                        <input class="form-checkbox text-indigo-600" type="checkbox" name="job_type[]" value="Contract"/>
+                        <span class="ml-2">Contract</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input class="form-checkbox text-indigo-600" type="checkbox" name="job_type[]" value="Day Based"/>
+                        <span class="ml-2">Day Based</span>
                     </label>
                 </div>
             </div>

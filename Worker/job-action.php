@@ -22,13 +22,28 @@ if (isset($_POST['action'])) {
             $sql .= " AND location = '$location'"; // Filter by location
         }
         if (!empty($categories)) {
-            $categoryList = "'" . implode("','", array_map($conn->real_escape_string, $categories)) . "'";
-            $sql .= " AND category IN ($categoryList)"; // Filter by categories
+            $categoryList = "'" . implode("','", array_map(function ($item) use ($conn) {
+                return $conn->real_escape_string($item);
+            }, $categories)) . "'";
+            $sql .= " AND category IN ($categoryList)";
         }
+        
         if (!empty($jobTypes)) {
-            $jobTypeList = "'" . implode("','", array_map($conn->real_escape_string, $jobTypes)) . "'";
-            $sql .= " AND job_type IN ($jobTypeList)"; // Filter by job types
+            $jobTypeList = "'" . implode("','", array_map(function ($item) use ($conn) {
+                return $conn->real_escape_string($item);
+            }, $jobTypes)) . "'";
+            $sql .= " AND job_type IN ($jobTypeList)";
         }
+        
+        // Debug query
+        error_log("SQL Query: $sql");
+        
+        $result = $conn->query($sql);
+        
+        if (!$result) {
+            die("Query Error: " . $conn->error);
+        }
+        
 
         // Add sorting
         if ($sortBy == 'latest') {

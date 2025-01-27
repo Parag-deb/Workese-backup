@@ -17,20 +17,16 @@ if ($_POST['action'] == 'fetchData') {
             LEFT JOIN rating ON users.id = rating.user_id
             WHERE 1=1 "; // Start with a base query
 
+
+
+
     if (!empty($workerName)) {
         $sql .= " AND users.name LIKE '%" . $conn->real_escape_string($workerName) . "%'";
     }
     if (!empty($location)) {
         $sql .= " AND users.district = '" . $conn->real_escape_string($location) . "'";
     }
-    // if (!empty($categories)) {
-    //     $categoryList = "'" . implode("','", array_map([$conn, 'real_escape_string'], $_POST['categories'])) . "'";
-    //     $sql .= " AND workers.category IN ($categoryList)";
-    // }
-    // if (!empty($jobTypes)) {
-    //     $jobTypeList = "'" . implode("','", array_map([$conn, 'real_escape_string'], $_POST['job_types'])) . "'";
-    //     $sql .= " AND workers.job_type IN ($jobTypeList)";
-    // }
+ 
     if (!empty($experiences)) {
         $experienceList = "'" . implode("','", array_map([$conn, 'real_escape_string'], $_POST['experiences'])) . "'";
         $sql .= " AND workers.experience IN ($experienceList)";
